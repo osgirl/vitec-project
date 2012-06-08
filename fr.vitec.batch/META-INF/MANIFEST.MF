@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %Bundle-Name
+Bundle-SymbolicName: fr.vitec.batch; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: fr.vitec.batch.Activator
+Require-Bundle: fr.vitec.fmk;bundle-version="1.0.0",
+ fr.vitec.model;bundle-version="1.0.0";visibility:=reexport,
+ org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.forms;bundle-version="3.5.100",
+ fr.vitec.test;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: .,
+ swt-grouplayout.jar
+Export-Package: fr.vitec.batch.extension,
+ fr.vitec.batch.views

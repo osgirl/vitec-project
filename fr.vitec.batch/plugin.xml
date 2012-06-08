@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="fr.vitec.batch.findFilm" name="findFilm" schema="schema/findFilm.exsd"/>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="%category.name"
+            id="fr.vitec.batch">
+      </category>
+      <view
+            name="%view.name"
+            icon="icons/sample.gif"
+            category="fr.vitec.batch"
+            class="fr.vitec.batch.views.BatchView"
+            id="fr.vitec.batch.views.BatchView">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="fr.vitec.batch.perspective.PerspectiveFactoryBatch"
+            id="fr.vitec.batch.perspective.batch"
+            name="%perspective.name">
+      </perspective>
+   </extension>
+
+</plugin>
