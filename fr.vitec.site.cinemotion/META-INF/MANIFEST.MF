@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Cinemotion
+Bundle-SymbolicName: fr.vitec.site.cinemotion;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: fr.vitec.site.cinemotion.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ fr.vitec.batch,
+ fr.vitec.fmk;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy

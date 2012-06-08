@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Model
+Bundle-SymbolicName: fr.vitec.model
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: fr.vitec.model.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ fr.vitec.fmk;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: fr.vitec.model,
+ fr.vitec.model.xmlbinding

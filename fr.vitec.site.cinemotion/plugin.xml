@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="fr.vitec.batch.findFilm">
+      <site
+            class="fr.vitec.site.cinemotion.FindFilmInfoFromCinemotion">
+      </site>
+   </extension>
+
+</plugin>
