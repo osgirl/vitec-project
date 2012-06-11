@@ -28,6 +28,12 @@ public class OpenHandler implements IHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		String fileName = new RcpFileChooser().openFile(RcpFileChooser.XML_EXTENTION);
+		open(fileName);
+
+		return null;
+	}
+
+	public void open(String fileName) {
 		if(fileName!=null){
 			RcpUtils.switchPerspective(Perspective.ID);
 			RcpUtils.activateActivity(Id.ACTIVITY_MASTER);
@@ -37,8 +43,6 @@ public class OpenHandler implements IHandler {
 			model.open(fileName);
 			viewMaster.setInput(model);
 		}
-
-		return null;
 	}
 
 	@Override

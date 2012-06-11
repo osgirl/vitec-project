@@ -242,9 +242,9 @@ public class BatchView extends ViewPart {
 		viewer.setLabelProvider(new ViewTableLabelProvider());
 		//viewer.setSorter(new NameSorter());
 
-		//viewer.setInput(VitecModel.getInstance());
-		BaseSample model = new BaseSample();
-		viewer.setInput(model.getModel());
+		viewer.setInput(VitecModel.getInstance());
+		//DBG BaseSample model = new BaseSample();
+		//DBG viewer.setInput(model.getModel());
 		
 		if(findFilmInfosArray.length > 0){
 			comboViewer.setSelection(new StructuredSelection(findFilmInfosArray[0]));

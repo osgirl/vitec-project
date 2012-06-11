@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Observable;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -23,12 +24,16 @@ import fr.vitec.model.xmlbinding.PropertyType;
 import fr.vitec.model.xmlbinding.SiteType;
 
 
-public class VitecModel {
+public class VitecModel extends Observable{
 	private ObjectFactory of;
 	//private List<FilmType> films;
 	private BaseType baseType;
 	private String basePath;
 	
+	public String getBasePath() {
+		return basePath;
+	}
+
 	private static VitecModel vitecModel = null;
 	
 	private VitecModel() {
@@ -82,12 +87,12 @@ public class VitecModel {
 //		}
 //	}
 
-	public void addFilm(String imagePath, String title, String titleDisk, String year, String path, String genre, String runtime, String country, String director, String actorsName, String summary, String urlReference){
+	public FilmType addFilm(String imagePath, String title, String titleDisk, String year, String path, String genre, String runtime, String country, String director, String actorsName, String summary, String urlReference){
 		String[] tActorsName = actorsName.split(",");
-		addFilm(imagePath, title, titleDisk, year, path, genre, runtime, country, director, Arrays.asList(tActorsName), summary, urlReference);
+		return addFilm(imagePath, title, titleDisk, year, path, genre, runtime, country, director, Arrays.asList(tActorsName), summary, urlReference);
 	}
 
-	public void addFilm(String imagePath, String title, String titleDisk, String year, String path, String genre, String runtime, String country, String director, List<String> actorsName, String summary, String urlReference){
+	public FilmType addFilm(String imagePath, String title, String titleDisk, String year, String path, String genre, String runtime, String country, String director, List<String> actorsName, String summary, String urlReference){
 		FilmType film = of.createFilmType();
 
 		for (String actorName : actorsName) {
@@ -118,6 +123,8 @@ public class VitecModel {
 				break;
 			}
 		}
+		
+		return film;
 	}
 
 	public void marshal() {
@@ -216,7 +223,9 @@ public class VitecModel {
 		List<String> actorsName = basicFilmInfos.getLActeurs();
 		String summary = basicFilmInfos.getSynopsis();
 		String urlReference = basicFilmInfos.getFullSiteAdr();
-		addFilm(imagePath, title, titleDisk, year, fullPath, genre, runtime, country, director, actorsName, summary, urlReference);
+		FilmType filmType = addFilm(imagePath, title, titleDisk, year, fullPath, genre, runtime, country, director, actorsName, summary, urlReference);
+		setChanged();
+		notifyObservers(filmType);
 	}
 
 //	public List<FilmType> getFilms(DirectoryType dir) {

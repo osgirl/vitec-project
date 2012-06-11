@@ -28,9 +28,9 @@ public class Perspective implements IPerspectiveFactory {
 		folder.addPlaceholder(ViewPartDetails.ID + ":*"); //$NON-NLS-1$
 		folder.addView(ViewPartDetails.ID);
 
-		folder = layout.createFolder("tmp", IPageLayout.TOP, 0.5f, editorArea);
-		folder.addPlaceholder(BatchView.ID + ":*"); //$NON-NLS-1$
-		folder.addView(BatchView.ID);
+		//DBG folder = layout.createFolder("tmp", IPageLayout.TOP, 0.5f, editorArea);
+		//DBG folder.addPlaceholder(BatchView.ID + ":*"); //$NON-NLS-1$
+		//DBG folder.addView(BatchView.ID);
 
 		layout.getViewLayout(ViewPartMaster.ID).setCloseable(false);
 	}

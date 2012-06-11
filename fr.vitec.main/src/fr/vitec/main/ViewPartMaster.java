@@ -1,5 +1,8 @@
 package fr.vitec.main;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -7,17 +10,21 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.part.ViewPart;
 
 
 import fr.vitec.fmk.rcp.RcpUtils;
+import fr.vitec.main.elementfactory.BaseFactory;
 import fr.vitec.main.ui.treemaster.TreeMasterContentProvider;
 import fr.vitec.main.ui.treemaster.TreeMasterLabelProvider;
 import fr.vitec.main.util.id.Id;
 import fr.vitec.model.VitecModel;
 import fr.vitec.model.xmlbinding.FilmType;
 
-public class ViewPartMaster extends ViewPart {
+public class ViewPartMaster extends ViewPart implements Observer, IPersistableElement {
 
 	public static final String ID = "fr.vitec.main.viewMaster";
 	
@@ -62,6 +69,7 @@ public class ViewPartMaster extends ViewPart {
 	public void setInput(VitecModel model){
 		this.model = model;
 		viewer.setInput(model);
+		model.addObserver(this);
 	}
 
 	@Override
@@ -73,4 +81,31 @@ public class ViewPartMaster extends ViewPart {
 		return viewer;
 	}
 
+	@Override
+	public void update(Observable o, Object arg) {
+		if(o instanceof VitecModel){
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					viewer.refresh();
+				}
+			});
+		}
+	}
+
+	@Override
+	public String getFactoryId() {
+		return BaseFactory.ID;
+	}
+
+	@Override
+	public void saveState(IMemento memento) {
+		BaseFactory.saveState(memento, model.getBasePath());
+	}
+	
+	public IPersistableElement getPersistable() {
+		return model == null ? null : this;
+	}
+	
+	
 }

@@ -387,9 +387,12 @@ public class FilmType {
         return this.actor;
     }
 
-    public void setActor(List<ActorType> actors){
+    public void setActor(List<String> actors){
     	getActor().clear();
-    	for (ActorType actorType : actors) {
+    	ObjectFactory of = new ObjectFactory();
+    	for (String actorName : actors) {
+    		ActorType actorType = of.createActorType();
+    		actorType.setName(actorName);
     		getActor().add(actorType);
 		}
     }

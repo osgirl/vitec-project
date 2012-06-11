@@ -106,5 +106,12 @@
             pattern="fr.vitec.main/fr.vitec.main.viewDetails">
       </activityPatternBinding>
    </extension>
+   <extension
+         point="org.eclipse.ui.elementFactories">
+      <factory
+            class="fr.vitec.main.elementfactory.BaseFactory"
+            id="fr.vitec.main.factory.base">
+      </factory>
+   </extension>
 
 </plugin>
