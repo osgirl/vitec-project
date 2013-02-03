@@ -43,7 +43,7 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:org.eclipse.ui.main.menu">
+            locationURI="menu:file?after=startFile">
          <menu
                label="%menu.label">
             <command
@@ -55,6 +55,10 @@
                   commandId="org.eclipse.ui.file.exit"
                   label="%command.label.0">
             </command>
+            <dynamic
+                  class="org.eclipse.ui.actions.ContributionItemFactory.REOPEN_EDITORS "
+                  id="org.eclipse.ui.actions.ContributionItemFactory.REOPEN_EDITORS ">
+            </dynamic>
          </menu>
          <menu
                label="%menu.label.0">
