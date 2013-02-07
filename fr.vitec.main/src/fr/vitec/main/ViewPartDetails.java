@@ -68,6 +68,7 @@ public class ViewPartDetails extends ViewPart {
 	private FilmType film;
 
 	private Label lblImage;
+	private Text txtReference;
 	
 	public ViewPartDetails() {
 	}
@@ -176,20 +177,30 @@ public class ViewPartDetails extends ViewPart {
 																		sctnInformationsTechniques.setClient(composite_1);
 																		
 																				Label lblTitreSurLe = toolkit.createLabel(composite_1, Messages.ViewPartDetails_22, SWT.NONE);
-																				lblTitreSurLe.setBounds(10, 13, 94, 13);
+																				lblTitreSurLe.setBounds(10, 15, 94, 13);
 																				
 																						txtTitleDisk = toolkit.createText(composite_1, "", SWT.NONE); //$NON-NLS-1$
 																						txtTitleDisk.setText(""); //$NON-NLS-1$
-																						txtTitleDisk.setBounds(110, 10, 416, 21);
+																						txtTitleDisk.setBounds(110, 12, 416, 21);
 																						
 																								Label lblChemin = toolkit.createLabel(composite_1, Messages.ViewPartDetails_25, SWT.NONE);
-																								lblChemin.setBounds(10, 36, 49, 13);
+																								lblChemin.setBounds(10, 48, 49, 13);
 																								
 																										txtPath = toolkit.createText(composite_1, "", SWT.NONE);//$NON-NLS-1$
 																										txtPath.setText(""); //$NON-NLS-1$
-																										txtPath.setBounds(110, 33, 416, 21);
+																										txtPath.setBounds(110, 45, 416, 21);
 																										bindingManager.addControls(this, lblTitle, lblYear, lblGenre, 
 																												txtActor, lblCountry, lblRuntime, txtDirector, txtSummary, txtTitleDisk, txtPath);
+																										
+																										txtReference = new Text(composite_1, SWT.BORDER);
+																										txtReference.setText("");
+																										txtReference.setBounds(110, 78, 416, 21);
+																										toolkit.adapt(txtReference, true, true);
+																										
+																										Label lblReferenceTxt = new Label(composite_1, SWT.NONE);
+																										lblReferenceTxt.setBounds(10, 81, 79, 13);
+																										toolkit.adapt(lblReferenceTxt, true, true);
+																										lblReferenceTxt.setText(Messages.ViewPartDetails_ref);
 		createActions();
 		initializeToolBar();
 		initializeMenu();

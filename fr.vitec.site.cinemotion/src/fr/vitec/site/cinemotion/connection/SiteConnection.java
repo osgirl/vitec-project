@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import fr.vitec.model.BasicsInfos;
+import fr.vitec.site.cinemotion.CinemotionBasicsInfos;
 
 
 
@@ -100,7 +101,7 @@ public class SiteConnection extends SocketConnection{
 			String[] films = split(str, "separateur", getLastEndPosMatching());
 			
 			for (String film : films) {
-				bi = new BasicsInfos();
+				bi = new CinemotionBasicsInfos();
 				lbasicsInfos.add(bi);
 				this.getInfos(film, "recherche", bi, Mode.MODE_TWO);
 			}

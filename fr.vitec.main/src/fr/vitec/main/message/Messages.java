@@ -18,6 +18,10 @@ public class Messages extends NLS {
 	public static String ViewPartDetails_7;
 	public static String ViewPartDetails_8;
 	public static String ViewPartDetails_9;
+	public static String ViewPartDetails_text_text;
+	public static String ViewPartDetails_text_1_text;
+	public static String ViewPartDetails_lblNewLabel_2_text;
+	public static String ViewPartDetails_ref;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

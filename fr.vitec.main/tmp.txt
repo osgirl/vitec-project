@@ -10,3 +10,19 @@ svn checkout http://vitec-project.googlecode.com/svn/trunk/ vitec-project-read-o
 https://code.google.com/p/vitec-project/
 sm2qB8cU7Cr9
 
+
+
+
+###RAF###
+- TODO
+- Afficher le nom de la base dans le titre
+- Gestion action "Créer un nouvelle base" alors qu'une autre est déjà ouverte
+- Gestion close base
+- Gestion suppression d'un film
+- Gestion mode dirty
+- Gestion sauvegarde améliorée de la base (avec le mode dirty => "voulez-vous sauvegarder la base ?" à la fermeture de l'appli si pas d'enregistrement effectué avant)
+- Gestion suppression dans le tableau d'analyse
+- Maj plugin cinemotion
+- Gérer tri/vue pas genre
+
+

@@ -18,7 +18,6 @@ public class Messages extends NLS {
 	public static String BatchView_tblclmnNewColumn_text_1;
 	public static String BatchView_tblclmnSource_text;
 	public static String BatchView_tblclmnFiltre_text;
-	public static String BatchView_tblclmnRcursif_text;
 	public static String BatchView_tblclmnChoixChemin_text;
 	public static String BatchView_tblclmnChemin_text;
 	public static String BatchView_tblclmnNewColumn_text_2;

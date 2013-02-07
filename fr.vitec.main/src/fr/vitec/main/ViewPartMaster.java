@@ -25,7 +25,7 @@ import fr.vitec.main.util.id.Id;
 import fr.vitec.model.VitecModel;
 import fr.vitec.model.xmlbinding.FilmType;
 
-public class ViewPartMaster extends ViewPart implements Observer, IPersistableElement, IEditorInput {
+public class ViewPartMaster extends ViewPart implements Observer, IPersistableElement {
 
 	public static final String ID = "fr.vitec.main.viewMaster";
 	
@@ -108,29 +108,6 @@ public class ViewPartMaster extends ViewPart implements Observer, IPersistableEl
 		return model == null ? null : this;
 	}
 	
-	@Override
-	public boolean exists() {
-		return true;
-	}
-
-	@Override
-	public ImageDescriptor getImageDescriptor() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return "toto";
-	}
-
-	@Override
-	public String getToolTipText() {
-		// TODO Auto-generated method stub
-		return "tototo";
-	}
-
 	
 	
 	@Override

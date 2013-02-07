@@ -89,7 +89,7 @@ public class VitecModel extends Observable{
 		baseType.getProperty().getDirectory().add(dir);
 	}
 
-	//TODO remove: la conso ne sera plus utile si lors de la creation de la base le lien film<->directory est cr�er
+	//La conso ne sera plus utile si lors de la creation de la base le lien film<->directory est cr�er
 //	private void conso() {
 //		for(FilmType film : baseType.getFilm()){
 //			for(DirectoryType dir : baseType.getProperty().getDirectory()){
@@ -238,7 +238,7 @@ public class VitecModel extends Observable{
 		String director = basicFilmInfos.getRealisateur();
 		List<String> actorsName = basicFilmInfos.getLActeurs();
 		String summary = basicFilmInfos.getSynopsis();
-		String urlReference = basicFilmInfos.getFullSiteAdr();
+		String urlReference = basicFilmInfos.getFullReference();
 		FilmType filmType = addFilm(imagePath, title, titleDisk, year, fullPath, genre, runtime, country, director, actorsName, summary, urlReference);
 		setChanged();
 		notifyObservers(filmType);
