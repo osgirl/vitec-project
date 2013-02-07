@@ -25,6 +25,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.ViewPart;
 
 import fr.vitec.fmk.binding.BindingManager;
+import fr.vitec.fmk.image.ImageUtil;
 import fr.vitec.fmk.resource.SWTResourceManager;
 import fr.vitec.main.message.Messages;
 import fr.vitec.model.VitecModel;
@@ -53,13 +54,15 @@ public class ViewPartDetails extends ViewPart {
 	private Text txtSummary;
 	private Text txtTitleDisk;
 	private Text txtPath;
-	private Label lblTitle;
-	private Label lblYear;
-	private Label lblGenre;
-	private Label lblCountry;
-	private Label lblRuntime;
+	private Text lblTitle;
+	private Text lblYear;
+	private Text lblGenre;
+	private Text lblCountry;
+	private Text lblRuntime;
 
 	private FilmType film;
+
+	private Label lblImage;
 	
 	public ViewPartDetails() {
 	}
@@ -70,9 +73,9 @@ public class ViewPartDetails extends ViewPart {
 		parent.setLayout(new GridLayout(1, false));
 
 		Section sctnNewSection = toolkit.createSection(parent, Section.EXPANDED | Section.TWISTIE | Section.TITLE_BAR);
-		GridData gd_sctnNewSection = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		GridData gd_sctnNewSection = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 3);
 		gd_sctnNewSection.widthHint = 659;
-		gd_sctnNewSection.heightHint = 324;
+		gd_sctnNewSection.heightHint = 415;
 		sctnNewSection.setLayoutData(gd_sctnNewSection);
 		sctnNewSection.setSize(227, 80);
 		toolkit.paintBordersFor(sctnNewSection);
@@ -84,79 +87,100 @@ public class ViewPartDetails extends ViewPart {
 		sctnNewSection.setClient(composite);
 		toolkit.paintBordersFor(composite);
 
-		lblTitle = toolkit.createLabel(composite, Messages.ViewPartDetails_3, SWT.NONE);
-		lblTitle.setBounds(139, 10, 498, 33);
+		lblTitle = new Text(composite, SWT.NONE);
+		lblTitle.setBounds(183, 12, 390, 33);
 		lblTitle.setFont(SWTResourceManager.getFont("Tahoma", 16, SWT.BOLD)); //$NON-NLS-1$
 
-		Label label = toolkit.createLabel(composite, "", SWT.NONE); //$NON-NLS-1$
-		label.setImage(SWTResourceManager.getImage("D:\\dev\\workspace_test\\fr.vitec.main\\src\\product_lg.gif")); //$NON-NLS-1$
-		label.setBounds(10, 10, 123, 189);
+		lblImage = toolkit.createLabel(composite, "", SWT.NONE);
+		lblImage.setImage(SWTResourceManager.getImage("D:\\dev\\workspace_test\\fr.vitec.main\\src\\product_lg.gif")); //$NON-NLS-1$
+		lblImage.setBounds(10, 10, 167, 202);
 
-		lblYear = toolkit.createLabel(composite, Messages.ViewPartDetails_7, SWT.NONE);
-		lblYear.setBounds(149, 49, 378, 13);
+		lblYear = new Text(composite, SWT.NONE);
+		lblYear.setBounds(262, 65, 309, 21);
 
-		lblGenre = toolkit.createLabel(composite, Messages.ViewPartDetails_8, SWT.NONE);
-		lblGenre.setBounds(149, 89, 378, 13);
+		lblGenre = new Text(composite, SWT.NONE);
+		lblGenre.setBounds(262, 131, 309, 21);
 
-		lblCountry = toolkit.createLabel(composite, Messages.ViewPartDetails_9, SWT.NONE);
-		lblCountry.setBounds(149, 68, 378, 13);
+		lblCountry = new Text(composite, SWT.NONE);
+		lblCountry.setBounds(262, 98, 309, 21);
 
-		lblRuntime = toolkit.createLabel(composite, Messages.ViewPartDetails_10, SWT.NONE);
-		lblRuntime.setBounds(149, 108, 378, 13);
+		lblRuntime = new Text(composite, SWT.NONE);
+		lblRuntime.setBounds(262, 164, 309, 21);
 
 		Label lblRalisation = toolkit.createLabel(composite, Messages.ViewPartDetails_11, SWT.NONE);
-		lblRalisation.setBounds(149, 130, 63, 13);
+		lblRalisation.setBounds(193, 200, 63, 13);
 
 		txtDirector = toolkit.createText(composite, "New Text", SWT.V_SCROLL); //$NON-NLS-1$
 		txtDirector.setText(""); //$NON-NLS-1$
-		txtDirector.setBounds(218, 127, 309, 21);
+		txtDirector.setBounds(262, 197, 309, 21);
 
 		Label lblActeurs = toolkit.createLabel(composite, Messages.ViewPartDetails_14, SWT.NONE);
-		lblActeurs.setBounds(149, 153, 49, 13);
+		lblActeurs.setBounds(193, 233, 49, 13);
 
 		txtActor = toolkit.createText(composite, "New Text", SWT.V_SCROLL | SWT.MULTI); //$NON-NLS-1$
 		txtActor.setText(""); //$NON-NLS-1$
-		txtActor.setBounds(218, 150, 309, 21);
+		txtActor.setBounds(262, 230, 309, 21);
 
 		Label lblRsum = toolkit.createLabel(composite, Messages.ViewPartDetails_17, SWT.NONE);
-		lblRsum.setBounds(149, 176, 49, 13);
+		lblRsum.setBounds(193, 264, 49, 13);
 
 		txtSummary = toolkit.createText(composite, "", SWT.V_SCROLL); //$NON-NLS-1$
 		txtSummary.setText(""); //$NON-NLS-1$
-		txtSummary.setBounds(218, 173, 309, 120);
-
-		Section sctnInformationsTechniques = toolkit.createSection(parent, Section.EXPANDED | Section.TWISTIE | Section.TITLE_BAR);
-		GridData gd_sctnInformationsTechniques = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_sctnInformationsTechniques.heightHint = 136;
-		gd_sctnInformationsTechniques.widthHint = 658;
-		sctnInformationsTechniques.setLayoutData(gd_sctnInformationsTechniques);
-		sctnInformationsTechniques.setDescription(""); //$NON-NLS-1$
-		toolkit.paintBordersFor(sctnInformationsTechniques);
-		sctnInformationsTechniques.setText(Messages.ViewPartDetails_21);
-
-		Composite composite_1 = toolkit.createComposite(sctnInformationsTechniques, SWT.WRAP);
-		toolkit.paintBordersFor(composite_1);
-		sctnInformationsTechniques.setClient(composite_1);
-
-		Label lblTitreSurLe = toolkit.createLabel(composite_1, Messages.ViewPartDetails_22, SWT.NONE);
-		lblTitreSurLe.setBounds(10, 13, 94, 13);
-
-		txtTitleDisk = toolkit.createText(composite_1, "", SWT.NONE); //$NON-NLS-1$
-		txtTitleDisk.setText(""); //$NON-NLS-1$
-		txtTitleDisk.setBounds(110, 10, 416, 21);
-
-		Label lblChemin = toolkit.createLabel(composite_1, Messages.ViewPartDetails_25, SWT.NONE);
-		lblChemin.setBounds(10, 36, 49, 13);
-
-		txtPath = toolkit.createText(composite_1, "", SWT.NONE);//$NON-NLS-1$
-		txtPath.setText(""); //$NON-NLS-1$
-		txtPath.setBounds(110, 33, 416, 21);
+		txtSummary.setBounds(264, 261, 309, 120);
 
 		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(listener);
 
 		bindingManager = new BindingManager();
-		bindingManager.addControls(this, lblTitle, lblYear, lblGenre, 
-				txtActor, lblCountry, lblRuntime, txtDirector, txtSummary, txtTitleDisk, txtPath);
+		
+		Label label = new Label(composite, SWT.NONE);
+		label.setBounds(193, 65, 49, 13);
+		toolkit.adapt(label, true, true);
+		label.setText(Messages.ViewPartDetails_7);
+		
+		Label lblNewLabel = new Label(composite, SWT.NONE);
+		lblNewLabel.setBounds(193, 96, 69, 15);
+		toolkit.adapt(lblNewLabel, true, true);
+		lblNewLabel.setText(Messages.ViewPartDetails_9);
+		
+		Label lblNewLabel_1 = new Label(composite, SWT.NONE);
+		lblNewLabel_1.setBounds(193, 131, 37, 13);
+		toolkit.adapt(lblNewLabel_1, true, true);
+		lblNewLabel_1.setText(Messages.ViewPartDetails_8);
+		
+		Label lblDure = new Label(composite, SWT.NONE);
+		lblDure.setBounds(193, 164, 63, 13);
+		toolkit.adapt(lblDure, true, true);
+		lblDure.setText(Messages.ViewPartDetails_10);
+																new Label(parent, SWT.NONE);
+														
+																Section sctnInformationsTechniques = toolkit.createSection(parent, Section.EXPANDED | Section.TWISTIE | Section.TITLE_BAR);
+																GridData gd_sctnInformationsTechniques = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+																gd_sctnInformationsTechniques.heightHint = 136;
+																gd_sctnInformationsTechniques.widthHint = 658;
+																sctnInformationsTechniques.setLayoutData(gd_sctnInformationsTechniques);
+																sctnInformationsTechniques.setDescription(""); //$NON-NLS-1$
+																toolkit.paintBordersFor(sctnInformationsTechniques);
+																sctnInformationsTechniques.setText(Messages.ViewPartDetails_21);
+																
+																		Composite composite_1 = toolkit.createComposite(sctnInformationsTechniques, SWT.WRAP);
+																		toolkit.paintBordersFor(composite_1);
+																		sctnInformationsTechniques.setClient(composite_1);
+																		
+																				Label lblTitreSurLe = toolkit.createLabel(composite_1, Messages.ViewPartDetails_22, SWT.NONE);
+																				lblTitreSurLe.setBounds(10, 13, 94, 13);
+																				
+																						txtTitleDisk = toolkit.createText(composite_1, "", SWT.NONE); //$NON-NLS-1$
+																						txtTitleDisk.setText(""); //$NON-NLS-1$
+																						txtTitleDisk.setBounds(110, 10, 416, 21);
+																						
+																								Label lblChemin = toolkit.createLabel(composite_1, Messages.ViewPartDetails_25, SWT.NONE);
+																								lblChemin.setBounds(10, 36, 49, 13);
+																								
+																										txtPath = toolkit.createText(composite_1, "", SWT.NONE);//$NON-NLS-1$
+																										txtPath.setText(""); //$NON-NLS-1$
+																										txtPath.setBounds(110, 33, 416, 21);
+																										bindingManager.addControls(this, lblTitle, lblYear, lblGenre, 
+																												txtActor, lblCountry, lblRuntime, txtDirector, txtSummary, txtTitleDisk, txtPath);
 		createActions();
 		initializeToolBar();
 		initializeMenu();
@@ -246,5 +270,8 @@ public class ViewPartDetails extends ViewPart {
 	public void setFilm(FilmType film) {
 		this.film = film;
 		bind(film);
+		String imageEncodedStr = film.getImageEncoded();
+		Image image = ImageUtil.getSwtImageFromEncodedString(imageEncodedStr);
+		lblImage.setImage(image);
 	}
 }

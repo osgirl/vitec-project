@@ -1,11 +1,8 @@
 package fr.vitec.fmk.image;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -14,6 +11,8 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 
 import fr.vitec.fmk.exception.VitecException;
 import fr.vitec.fmk.nls.Messages;
@@ -81,7 +80,7 @@ public class ImageUtil {
 	//	}
 
 
-	public BufferedImage getBufferedImageFromEncodedString(String encodedStr){
+	public static BufferedImage getBufferedImageFromEncodedString(String encodedStr){
 		byte[] imageInByte = Base64.decodeBase64(encodedStr.getBytes());
 
 		// convert byte array back to BufferedImage
@@ -93,6 +92,16 @@ public class ImageUtil {
 			throw new VitecException(e);
 		}
 		return bImageFromConvert;
+	}
+	
+	public static Image getSwtImageFromEncodedString(String encodedStr){
+		byte[] imageInByte = Base64.decodeBase64(encodedStr.getBytes());
+
+		// convert byte array back to BufferedImage
+		InputStream inputStream = new ByteArrayInputStream(imageInByte);
+		
+		return new Image(Display.getCurrent(), inputStream);
+		
 	}
 
 //	private static void writeFile(byte[] tab,String fichier) throws IOException {

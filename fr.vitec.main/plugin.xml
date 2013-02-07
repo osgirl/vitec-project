@@ -43,31 +43,28 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:file?after=startFile">
-         <menu
-               label="%menu.label">
-            <command
-                  commandId="fr.vitec.main.commandOpen"
-                  label="%command.label"
-                  style="push">
-            </command>
-            <command
-                  commandId="org.eclipse.ui.file.exit"
-                  label="%command.label.0">
-            </command>
-            <dynamic
-                  class="org.eclipse.ui.actions.ContributionItemFactory.REOPEN_EDITORS "
-                  id="org.eclipse.ui.actions.ContributionItemFactory.REOPEN_EDITORS ">
-            </dynamic>
-         </menu>
-         <menu
-               label="%menu.label.0">
-            <command
-                  commandId="org.eclipse.ui.views.showView"
-                  label="%command.label.1"
-                  style="push">
-            </command>
-         </menu>
+            locationURI="menu:fr.vitec.main.menu.file?before=additions">
+         <command
+               commandId="fr.vitec.main.commandCreate"
+               label="%create.base"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="menu:fr.vitec.main.menu.file?before=additions">
+         <command
+               commandId="fr.vitec.main.commandOpen"
+               label="%command.label"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="menu:fr.vitec.main.menu.windows?after=windowsStart">
+         <command
+               commandId="org.eclipse.ui.views.showView"
+               label="%command.label.1"
+               style="push">
+         </command>
       </menuContribution>
    </extension>
    <extension
@@ -84,6 +81,11 @@
    </extension>
    <extension
          point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="fr.vitec.main.handler.CreateHandler"
+            id="fr.vitec.main.commandCreate"
+            name="%command.create.name">
+      </command>
       <command
             defaultHandler="fr.vitec.main.handler.OpenHandler"
             id="fr.vitec.main.commandOpen"
