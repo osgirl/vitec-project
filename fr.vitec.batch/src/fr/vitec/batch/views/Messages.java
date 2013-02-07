@@ -24,6 +24,9 @@ public class Messages extends NLS {
 	public static String BatchView_tblclmnNewColumn_text_2;
 	public static String BatchView_tblclmnRcursif_text_1;
 	public static String BatchView_tblclmnChoixChemin_text_1;
+	public static String BatchView_btnNewButton_text;
+	public static String BatchView_btnNewButton_text_1;
+	public static String BatchView_btnNewButton_1_text;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

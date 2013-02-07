@@ -5,7 +5,6 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 
-
 import fr.vitec.fmk.dialog.RcpFileChooser;
 import fr.vitec.fmk.rcp.RcpUtils;
 import fr.vitec.main.Perspective;
@@ -13,35 +12,37 @@ import fr.vitec.main.ViewPartMaster;
 import fr.vitec.main.util.id.Id;
 import fr.vitec.model.VitecModel;
 
-public class OpenHandler implements IHandler {
+public class CreateHandler implements IHandler {
 
 	@Override
 	public void addHandlerListener(IHandlerListener handlerListener) {
+		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void dispose() {
+		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		String fileName = new RcpFileChooser().openFile(RcpFileChooser.XML_EXTENTION);
-		open(fileName);
-
+		String fileName = new RcpFileChooser().createFile(RcpFileChooser.XML_EXTENTION);
+		create(fileName);
 		return null;
 	}
 
-	public void open(String fileName) {
+	private void create(String fileName) {
 		if(fileName!=null){
 			RcpUtils.switchPerspective(Perspective.ID);
 			RcpUtils.activateActivity(Id.ACTIVITY_MASTER);
 			RcpUtils.activateActivity("fr.vitec.batch.activity.view");//TODO à gérer par point d'extention
+			
 			ViewPartMaster viewMaster = (ViewPartMaster) RcpUtils.getView(ViewPartMaster.ID);
 
 			VitecModel model = VitecModel.getInstance();
-			model.open(fileName);
+			model.create(fileName);
 			viewMaster.setInput(model);
 		}
 	}

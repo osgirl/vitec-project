@@ -3,6 +3,7 @@ package fr.vitec.main;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -11,10 +12,10 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.part.ViewPart;
-
 
 import fr.vitec.fmk.rcp.RcpUtils;
 import fr.vitec.main.elementfactory.BaseFactory;
@@ -24,7 +25,7 @@ import fr.vitec.main.util.id.Id;
 import fr.vitec.model.VitecModel;
 import fr.vitec.model.xmlbinding.FilmType;
 
-public class ViewPartMaster extends ViewPart implements Observer, IPersistableElement {
+public class ViewPartMaster extends ViewPart implements Observer, IPersistableElement, IEditorInput {
 
 	public static final String ID = "fr.vitec.main.viewMaster";
 	
@@ -105,6 +106,36 @@ public class ViewPartMaster extends ViewPart implements Observer, IPersistableEl
 	
 	public IPersistableElement getPersistable() {
 		return model == null ? null : this;
+	}
+	
+	@Override
+	public boolean exists() {
+		return true;
+	}
+
+	@Override
+	public ImageDescriptor getImageDescriptor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return "toto";
+	}
+
+	@Override
+	public String getToolTipText() {
+		// TODO Auto-generated method stub
+		return "tototo";
+	}
+
+	
+	
+	@Override
+	public Object getAdapter(Class adapter) {
+		return null;
 	}
 	
 	

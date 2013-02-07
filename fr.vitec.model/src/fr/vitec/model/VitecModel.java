@@ -54,6 +54,17 @@ public class VitecModel extends Observable{
 		this.basePath = basePath;
 		unmarshal();
 	}
+	
+	public void create(String fileName) {
+		of = new ObjectFactory();
+		baseType = of.createBaseType();
+		PropertyType prop = of.createPropertyType();
+		baseType.setProperty(prop);
+		this.basePath = fileName;
+		
+		marshal();
+		
+	}
 
 	public void setSite( String site ){
 		try{
@@ -64,6 +75,10 @@ public class VitecModel extends Observable{
 		}
 	}
 
+	public void addDirectory(String path){
+		addDirectory(path, "avi", FileType.FICHIER.value(), true);
+	}
+	
 	public void addDirectory(String path, String filter, String fileType, boolean recursive){
 		DirectoryType dir = of.createDirectoryType();
 		dir.setFile(FileType.fromValue(fileType));
@@ -169,7 +184,8 @@ public class VitecModel extends Observable{
 	}
 
 	public List<DirectoryType> getDirectories() {
-		return baseType.getProperty().getDirectory();
+		List<DirectoryType> directories = baseType.getProperty().getDirectory();
+		return directories==null?new ArrayList<DirectoryType>():directories;
 	}
 
 	public List<FilmType> getFilms() {
@@ -227,6 +243,8 @@ public class VitecModel extends Observable{
 		setChanged();
 		notifyObservers(filmType);
 	}
+
+
 
 //	public List<FilmType> getFilms(DirectoryType dir) {
 //		List<FilmType> films = new ArrayList<FilmType>();

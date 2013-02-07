@@ -11,7 +11,7 @@ public class ViewTableContentProvider implements IStructuredContentProvider {
 	public void dispose() {
 	}
 	public Object[] getElements(Object parent) {
-		if(parent instanceof VitecModel){
+		if(parent!=null && parent instanceof VitecModel){
 			VitecModel model = (VitecModel)parent;
 			return model.getDirectories().toArray();
 		}

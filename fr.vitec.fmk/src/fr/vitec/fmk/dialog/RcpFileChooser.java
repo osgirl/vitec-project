@@ -21,8 +21,21 @@ public class RcpFileChooser {
 	}
 	
 	public String openFile(String extention, String filtersName){
-		    
-		FileDialog dialog = new FileDialog(parent, SWT.OPEN);    
+		return createOrOpenFile(extention, filtersName, SWT.OPEN);	
+	}
+	
+	
+	public String createFile(String extention){
+		return createFile(extention, null);
+	}
+	
+	public String createFile(String extention, String filtersName){
+		return createOrOpenFile(extention, filtersName, SWT.SAVE);    
+	}
+
+	public String createOrOpenFile(String extention, String filtersName, int style){
+	    
+		FileDialog dialog = new FileDialog(parent, style);    
 		dialog.setFilterExtensions(new String[] {extention});
 		
 		if(filtersName == null){
@@ -32,7 +45,8 @@ public class RcpFileChooser {
 		}
 		return dialog.open();    
 	}
-
+	
+	
 	private String getFilterName(String extention) {
 		for (Object[] ext : tabExt) {
 			if(extention.equals((String)ext[0])){

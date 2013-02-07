@@ -26,6 +26,11 @@ public class RcpUtils {
 	        }
 	    }
 	    return null;
+	    
+	    //CE code semble mieux ! a TESTER !
+//	    IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+//		IWorkbenchPage page = window.getActivePage();
+//		page.findView(viewId);
 	}
 
 	public static boolean isActivityEnabled(String activityId){

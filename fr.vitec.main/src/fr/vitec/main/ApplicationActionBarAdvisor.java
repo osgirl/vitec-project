@@ -1,5 +1,16 @@
 package fr.vitec.main;
 
+import org.eclipse.jface.action.GroupMarker;
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
+import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
+import org.eclipse.ui.actions.ContributionItemFactory;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
@@ -10,6 +21,9 @@ import org.eclipse.ui.application.IActionBarConfigurer;
  */
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
+	// Fichier
+	private IWorkbenchAction exitAction;
+
 	// Actions - important to allocate these only in makeActions, and then use
 	// them
 	// in the fill methods. This ensures that the actions aren't recreated
@@ -19,4 +33,47 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		super(configurer);
 	}
 
+
+	@Override
+	protected void makeActions(IWorkbenchWindow window) {
+		exitAction = ActionFactory.QUIT.create(window);
+		register(exitAction);
+	}
+
+	@Override
+	protected void fillMenuBar(final IMenuManager menuBar) {
+		
+		IWorkbenchWindow window = getActionBarConfigurer().getWindowConfigurer().getWindow();
+		
+		//Menu Fichier
+		final MenuManager fileMenu = new MenuManager("Fichiers", "fr.vitec.main.menu.file");
+		fileMenu.add(new GroupMarker(IWorkbenchActionConstants.FILE_START));
+		fileMenu.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
+		fileMenu.add(new GroupMarker(IWorkbenchActionConstants.FILE_END));
+		fileMenu.add(ContributionItemFactory.REOPEN_EDITORS.create(window));
+		fileMenu.add(new Separator());
+		fileMenu.add(new GroupMarker(IWorkbenchActionConstants.MRU));
+		fileMenu.add(exitAction);
+
+		fileMenu.addMenuListener(new IMenuListener() {
+
+			public void menuAboutToShow(IMenuManager manager) {
+				IContributionItem[] contributionItems = fileMenu.getItems();
+				for (int i = 0; i < contributionItems.length; i++) {
+
+					contributionItems[i].update();
+				}
+				fileMenu.update(true);
+			}
+
+		});
+		menuBar.add(fileMenu);
+
+		//Menu Fenêtres
+		MenuManager windows = new MenuManager("Fenêtres", "fr.vitec.main.menu.windows");
+		windows.add(new GroupMarker("windowsStart"));
+		fileMenu.add(ContributionItemFactory.REOPEN_EDITORS.create(window));
+		windows.add(new GroupMarker("windowsEnd"));
+		menuBar.add(windows);
+	}
 }

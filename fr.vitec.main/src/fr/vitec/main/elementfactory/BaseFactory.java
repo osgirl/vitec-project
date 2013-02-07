@@ -11,7 +11,7 @@ import fr.vitec.main.handler.OpenHandler;
 
 public class BaseFactory implements IElementFactory {
 	private static final String TAG_PATH = "path"; //$NON-NLS-1$
-	public static final String ID = "fr.vitec.main.elementfactory.BaseFactory";
+	public static final String ID = "fr.vitec.main.factory.base";
 
 	@Override
 	public IAdaptable createElement(IMemento memento) {

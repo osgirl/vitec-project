@@ -25,5 +25,17 @@
             name="%perspective.name">
       </perspective>
    </extension>
+   <extension
+         point="org.eclipse.ui.activities">
+      <activity
+            id="fr.vitec.batch.activity.view"
+            name="batchActivity">
+      </activity>
+      <activityPatternBinding
+            activityId="fr.vitec.batch.activity.view"
+            isEqualityPattern="false"
+            pattern="fr.vitec.batch/fr.vitec.batch.views.BatchView">
+      </activityPatternBinding>
+   </extension>
 
 </plugin>

@@ -1,2 +1,12 @@
+# Project members authenticate over HTTPS to allow committing changes.
+svn checkout https://vitec-project.googlecode.com/svn/trunk/ vitec-project --username jlebiannic@gmail.com
+=>When prompted, enter your generated googlecode.com password.
+
+
+# Non-members may check out a read-only working copy anonymously over HTTP.
+svn checkout http://vitec-project.googlecode.com/svn/trunk/ vitec-project-read-only
+
+
 https://code.google.com/p/vitec-project/
 sm2qB8cU7Cr9
+

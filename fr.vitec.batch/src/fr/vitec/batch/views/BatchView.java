@@ -66,11 +66,15 @@ import fr.vitec.batch.ui.provider.ViewComboxLabelProvider;
 import fr.vitec.batch.ui.provider.ViewTableContentProvider;
 import fr.vitec.batch.ui.provider.ViewTableLabelProvider;
 import fr.vitec.batch.util.ChoixFilm;
+import fr.vitec.fmk.dialog.RcpFileChooser;
 import fr.vitec.fmk.dialog.UIMessages;
 import fr.vitec.fmk.exception.VitecException;
 import fr.vitec.fmk.resource.SWTResourceManager;
 import fr.vitec.model.VitecModel;
 import fr.vitec.model.xmlbinding.DirectoryType;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.wb.swt.ResourceManager;
+import org.eclipse.swt.events.SelectionAdapter;
 
 
 public class BatchView extends ViewPart {
@@ -153,6 +157,35 @@ public class BatchView extends ViewPart {
 		TableColumn tblclmnChoixChemin = tableViewerColumn_3.getColumn();
 		tblclmnChoixChemin.setWidth(88);
 		tblclmnChoixChemin.setText(Messages.BatchView_tblclmnChoixChemin_text_1);
+		
+		Composite composite_3 = new Composite(parent, SWT.NONE);
+		composite_3.setLayout(new RowLayout(SWT.HORIZONTAL));
+		GridData gd_composite_3 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_composite_3.widthHint = 236;
+		gd_composite_3.heightHint = 32;
+		composite_3.setLayoutData(gd_composite_3);
+		formToolkit.adapt(composite_3);
+		formToolkit.paintBordersFor(composite_3);
+		
+		Button btnAdd = new Button(composite_3, SWT.NONE);
+		btnAdd.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String dir = new RcpFileChooser().openDir();
+				if(dir != null){
+					VitecModel.getInstance().addDirectory(dir);
+					viewer.refresh();
+				}
+			}
+		});
+		btnAdd.setImage(ResourceManager.getPluginImage("fr.vitec.fmk", "icons/add.png"));
+		formToolkit.adapt(btnAdd, true, true);
+		btnAdd.setText("");
+		
+		Button btnSuppr = new Button(composite_3, SWT.NONE);
+		btnSuppr.setImage(ResourceManager.getPluginImage("fr.vitec.fmk", "icons/remove.png"));
+		formToolkit.adapt(btnSuppr, true, true);
+		btnSuppr.setText("");
 
 		Composite composite = formToolkit.createComposite(parent, SWT.NONE);
 		GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
