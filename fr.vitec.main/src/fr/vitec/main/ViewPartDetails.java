@@ -1,5 +1,8 @@
 package fr.vitec.main;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -34,7 +37,9 @@ import fr.vitec.model.xmlbinding.FilmType;
 public class ViewPartDetails extends ViewPart {
 
 	public static final String ID = "fr.vitec.main.viewDetails"; //$NON-NLS-1$
-
+	public static Map<FilmType, Image> images = new HashMap<FilmType, Image>();
+	
+	
 	private ISelectionListener listener = new ISelectionListener() {
 		public void selectionChanged(IWorkbenchPart sourcepart, ISelection selection) {
 			// we ignore our own selections
@@ -96,15 +101,19 @@ public class ViewPartDetails extends ViewPart {
 		lblImage.setBounds(10, 10, 167, 202);
 
 		lblYear = new Text(composite, SWT.NONE);
+		lblYear.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
 		lblYear.setBounds(262, 65, 309, 21);
 
 		lblGenre = new Text(composite, SWT.NONE);
+		lblGenre.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
 		lblGenre.setBounds(262, 131, 309, 21);
 
 		lblCountry = new Text(composite, SWT.NONE);
+		lblCountry.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
 		lblCountry.setBounds(262, 98, 309, 21);
 
 		lblRuntime = new Text(composite, SWT.NONE);
+		lblRuntime.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
 		lblRuntime.setBounds(262, 164, 309, 21);
 
 		Label lblRalisation = toolkit.createLabel(composite, Messages.ViewPartDetails_11, SWT.NONE);
@@ -266,12 +275,16 @@ public class ViewPartDetails extends ViewPart {
 		}) ;
 		
 	}
-
+	
 	public void setFilm(FilmType film) {
 		this.film = film;
 		bind(film);
-		String imageEncodedStr = film.getImageEncoded();
-		Image image = ImageUtil.getSwtImageFromEncodedString(imageEncodedStr);
+		Image image = images.get(film);
+		if(image == null){
+			String imageEncodedStr = film.getImageEncoded();
+			image = ImageUtil.getSwtImageFromEncodedString(imageEncodedStr);
+			images.put(film, image);
+		}
 		lblImage.setImage(image);
 	}
 }
