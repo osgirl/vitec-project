@@ -190,14 +190,15 @@ public class ViewPartDetails extends ViewPart {
 		txtPath = toolkit.createText(composite_1, "", SWT.NONE);//$NON-NLS-1$
 		txtPath.setText(""); //$NON-NLS-1$
 		txtPath.setBounds(110, 45, 416, 21);
-		bindingManager.addControls(this, lblTitle, lblYear, lblGenre, 
-				txtActor, lblCountry, lblRuntime, txtDirector, txtSummary, txtTitleDisk, txtPath, txtReference);
 
 		txtReference = new Text(composite_1, SWT.BORDER);
 		txtReference.setText("");
 		txtReference.setBounds(110, 78, 416, 21);
 		toolkit.adapt(txtReference, true, true);
 
+		bindingManager.addControls(this, lblTitle, lblYear, lblGenre, 
+				txtActor, lblCountry, lblRuntime, txtDirector, txtSummary, txtTitleDisk, txtPath, txtReference);
+		
 		Label lblReferenceTxt = new Label(composite_1, SWT.NONE);
 		lblReferenceTxt.setBounds(10, 81, 79, 13);
 		toolkit.adapt(lblReferenceTxt, true, true);
