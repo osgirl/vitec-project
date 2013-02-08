@@ -40,7 +40,7 @@ public class SiteConnection extends SocketConnection{
 		this.initSocket();
 		StringBuilder content = new StringBuilder("");
 
-		BufferedReader bufferReader = sendRequest(requestString);
+		BufferedReader bufferReader = sendRequest(requestString, "ISO-8859-1");
 		String currentLine = "";
 		String precedentLine = "";
 		boolean chunked = false;
@@ -215,7 +215,7 @@ public class SiteConnection extends SocketConnection{
 						localIndex = localIndex+m.group(0).length();
 						
 						if(finalMainValue.length()!=0){
-							finalMainValue.append(", ");
+							finalMainValue.append(BasicsInfos.ELEMENTS_SEP);
 						}
 
 						int count = m.groupCount();

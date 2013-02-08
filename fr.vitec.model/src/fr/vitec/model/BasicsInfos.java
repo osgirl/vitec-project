@@ -10,6 +10,8 @@ import fr.vitec.fmk.exception.VitecException;
 import fr.vitec.fmk.file.FileUtil;
 
 public class BasicsInfos {
+	public static final String ELEMENTS_SEP = "/";
+
 	public static final String HTTP_BEGIN = "http://";
 
 	private static final String BOLD_BEGIN = "<b>";
@@ -62,7 +64,7 @@ public class BasicsInfos {
 //			if(val.startsWith(ACTEURS_PREFIX)){
 //				val = val.substring(ACTEURS_PREFIX.length());
 //			}
-			String lStr[] = val.split(",");
+			String lStr[] = val.split(ELEMENTS_SEP);
 			
 			for (String str : lStr) {
 				getLActeurs().add(str.trim());

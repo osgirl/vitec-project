@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
 
 public class SocketConnection {
 	public static final String HTTP_BEGIN = "http://";
@@ -52,14 +53,14 @@ public class SocketConnection {
 		return this.getUrl().startsWith(HTTP_BEGIN)?"":HTTP_BEGIN + this.getUrl();
 	}
 	
-	protected BufferedReader sendRequest(String header){
+	protected BufferedReader sendRequest(String header, String charset){
 		BufferedReader source = null;
 		try {
 			OutputStream out=sock.getOutputStream();
 			out = sock.getOutputStream();
 			out.write(header.getBytes());
 			out.flush();
-			source = new BufferedReader(new InputStreamReader(sock.getInputStream(), "ISO-8859-1"));
+			source = new BufferedReader(new InputStreamReader(sock.getInputStream(), charset));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
