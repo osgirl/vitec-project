@@ -23,15 +23,8 @@ public class SiteConnection extends SocketConnection{
 	private static final String transferEncodChunkedExpr = "^Transfer-Encoding: *chunked$";
 	private static final Pattern patternTransferEncodChunked = Pattern.compile(transferEncodChunkedExpr, Pattern.CASE_INSENSITIVE);
 
-	protected interface Mode{
-		public static final int MODE_FULL = 0;
-		public static final int MODE_ONE = 1;
-		public static final int MODE_TWO = 2;
-	}
-
 	protected SitePropertiesManager propertiesManager = null;
 
-	private StringBuffer allLinesInOne = null;
 	private int lastEndPosMatching = 0;
 
 	public SiteConnection(String adr, SitePropertiesManager propertiesManager){
@@ -42,20 +35,19 @@ public class SiteConnection extends SocketConnection{
 
 	protected void logout(String s) {
 	}
-	/*===============================================================================*/
-	public List<BasicsInfos> sendRequestAndGetBasicsInfosOnRequest(String header){
-		this.initSocket();
 
-		BufferedReader br = sendRequest(header);
-		List<BasicsInfos>lbasicsInfos = null;
+	private String getRequestContent(String requestString){
+		this.initSocket();
+		StringBuilder content = new StringBuilder("");
+
+		BufferedReader bufferReader = sendRequest(requestString);
 		String currentLine = "";
 		String precedentLine = "";
 		boolean chunked = false;
-		StringBuffer sbuf = new StringBuffer("");
 		try {
 			boolean eof = false;
-			while(!eof && br!=null){
-				currentLine = br.readLine();
+			while(!eof && bufferReader!=null){
+				currentLine = bufferReader.readLine();
 
 				if(currentLine!=null){
 
@@ -63,9 +55,9 @@ public class SiteConnection extends SocketConnection{
 						chunked = isChunked(currentLine);
 					}
 					if(chunked){
-						currentLine = traiteChunk(currentLine, precedentLine, br);
+						currentLine = traiteChunk(currentLine, precedentLine, bufferReader);
 					}
-					sbuf.append(currentLine);
+					content.append(currentLine);
 					precedentLine = currentLine;
 					logout(currentLine);
 
@@ -78,7 +70,15 @@ public class SiteConnection extends SocketConnection{
 			e.printStackTrace();
 		}
 
-		lbasicsInfos = processForBasicInfo(sbuf);
+		return content.toString();
+	}
+
+	/*===============================================================================*/
+	public List<BasicsInfos> sendRequestAndGetBasicsInfosOnRequest(String header){
+
+		String requestContent = getRequestContent(header);
+
+		List<BasicsInfos> lbasicsInfos = processForBasicInfo(requestContent);
 
 		this.closeSocket();
 		return lbasicsInfos;		
@@ -87,23 +87,21 @@ public class SiteConnection extends SocketConnection{
 
 
 
-	private List<BasicsInfos> processForBasicInfo(StringBuffer sbuf) {
+	private List<BasicsInfos> processForBasicInfo(String content) {
 		List<BasicsInfos> lbasicsInfos = new ArrayList<BasicsInfos>();
 		BasicsInfos bi = null;
-		String currentSep="";
-		String str = sbuf.toString();
-		
-		int res = matchReponses(str);//positionne lastEndPosMatching
-		
+
+		int res = matchReponses(content);//positionne lastEndPosMatching
+
 		//currentSep = matchExpression(str, "separateur", getLastEndPosMatching());
 		if(res != 0){
-			
-			String[] films = split(str, "separateur", getLastEndPosMatching());
-			
+
+			String[] films = split(content, "separateur", getLastEndPosMatching());
+
 			for (String film : films) {
 				bi = new CinemotionBasicsInfos();
 				lbasicsInfos.add(bi);
-				this.getInfos(film, "recherche", bi, Mode.MODE_TWO);
+				this.getInfos(film, "recherche", bi);
 			}
 		}
 		return lbasicsInfos;
@@ -111,7 +109,7 @@ public class SiteConnection extends SocketConnection{
 
 
 	private String[] split(String str, String sep, int pos) {
-		
+
 		String regExpSep = getPropertiesManager().getValue(sep);
 		List<String> lFilms = new ArrayList<String>(); //d�coupage de la ligne (un �l�ment par film)
 
@@ -130,7 +128,7 @@ public class SiteConnection extends SocketConnection{
 			cpt++;
 		}
 		lFilms.add(str.substring(lastIdx,str.length()));
-		
+
 		return lFilms.toArray(new String[lFilms.size()]);
 	}
 
@@ -142,15 +140,15 @@ public class SiteConnection extends SocketConnection{
 		lastEndPosMatching = 0;
 		return pos ;
 	}
-	
+
 	private String matchExpression(String s, String regExpKey, int pos){
 		String expRegReponses = getPropertiesManager().getValue(regExpKey);
 		Pattern p = Pattern.compile(expRegReponses, Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(s);
-		
+
 		if(m.find(pos)){
 			lastEndPosMatching = m.end();
-			
+
 			if(m.groupCount()>0)
 				return m.group(1);
 			return m.group(0);
@@ -161,7 +159,7 @@ public class SiteConnection extends SocketConnection{
 	private String matchExpression(String s, String regExpKey){
 		return matchExpression(s, regExpKey, 0);
 	}
-	
+
 	private int matchReponses(String line) {
 		String res = matchExpression(line, "nbReponses");
 		if(!res.equals("")){
@@ -169,98 +167,88 @@ public class SiteConnection extends SocketConnection{
 		}
 		return 0;
 	}
-	/*===============================================================================*/
 
-	public BasicsInfos fillFullInfos(BasicsInfos info, String header){
-		this.initSocket();
-		BufferedReader br = this.sendRequest(header);
-		String precedentLine = "";
-		String currentLine = "";
-		this.allLinesInOne = new StringBuffer("");
-		boolean chunked=false;
-		try {
-			boolean eof = false;
-			while(!eof && br!=null){
-				currentLine = br.readLine();
-
-				if(currentLine!=null){
-					if(!chunked){
-						chunked = isChunked(currentLine);
-					}
-					if(chunked){
-						currentLine = traiteChunkNR(currentLine, precedentLine, br);
-					}
-					precedentLine = currentLine;
-					logout(currentLine);
-					allLinesInOne.append(currentLine);
-
-					if(this.getInfos(currentLine, "rechercheDetail", info, Mode.MODE_TWO).getSynopsis()!=null){
-						eof=true;
-					}
-				}
-				else{
-					eof=true;
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		this.closeSocket();	
-		return info;
+	public BasicsInfos sendRequestAndFillFullInfos(BasicsInfos basicsInfos, String header){
+		BasicsInfos fullInfo = null;
+		String content = getRequestContent(header);
+		fullInfo = getInfos(content, "rechercheDetail", basicsInfos);
+		return fullInfo;
 	}
 
 	/*===============================================================================*/
-	private BasicsInfos getInfos(String strFilm, String keyRecherche, BasicsInfos bi, int mode) {
-		return getInfos(strFilm, keyRecherche, bi, mode, 0);
+	private BasicsInfos getInfos(String strFilm, String keyRecherche, BasicsInfos bi) {
+		return getInfos(strFilm, keyRecherche, bi, 0);
 	}
-	
-	private BasicsInfos getInfos(String strFilm, String keyRecherche, BasicsInfos bi, int mode, int pos) {
+
+
+	private BasicsInfos getInfos(String strFilm, String keyRecherche, BasicsInfos basicsInfos, int pos) {
 
 		String expRecherche = getPropertiesManager().getValue(keyRecherche);
 		String[] lRecherche = expRecherche.split(",");
 
 		Pattern p = null;
 		Matcher m = null;
-		String strFound = null;
-		int idx=pos;
+		int globalIndex=pos;
 
 		for (int i = 0; i < lRecherche.length; i++) {//Recherche des infos d�crites dans la cl� "keyRecherche" du fichier de proprietes 
-			p = Pattern.compile(getPropertiesManager().getValue(lRecherche[i]), Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-			m = p.matcher(strFilm);
-			if(m.find(idx)){
+			String key = lRecherche[i];
 
-				if(bi==null){
-					logout("bi null");
-					return null;
-				}
-				int count = m.groupCount();
-				if(count==1){
-					strFound = m.group(1);
-					bi.AddInfo(lRecherche[i], strFound);
-					idx = m.start()+strFound.length();
-				}
-				else{
-					String[] lKey = lRecherche[i].split("\\.");
-					idx = m.start();
-					for (int j = 0; j < count; j++) {
-						strFound = m.group(j+1);
-						idx = idx+strFound.length();
-						bi.AddInfo(lKey[j], strFound);
+			if(key.contains("*")){//la clé est du type acteurs*acteur.role.
+				String[] elements = key.split("\\*");
+				String mainKey = elements[0];
+				String secondaryKey = elements[1];
+				StringBuilder finalMainValue = new StringBuilder("");
+
+				String mainValue = getPropertiesManager().getValue(mainKey);
+				p = Pattern.compile(mainValue, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+				m = p.matcher(strFilm);
+				if(m.find(globalIndex)){
+					String mainStr = m.group(0);
+					globalIndex = globalIndex+mainStr.length();
+
+					String secondaryValue = getPropertiesManager().getValue(secondaryKey);
+					p = Pattern.compile(secondaryValue, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+					m = p.matcher(mainStr);
+
+					int localIndex = 0;
+					while(m.find(localIndex)){
+						localIndex = localIndex+m.group(0).length();
+						
+						if(finalMainValue.length()!=0){
+							finalMainValue.append(", ");
+						}
+
+						int count = m.groupCount();
+						StringBuilder finalSecondaryValue = new StringBuilder("");
+						for (int j = 0; j < count; j++) {
+							String secondaryStr = m.group(j+1);
+
+							if(finalSecondaryValue.length()!=0){
+								finalSecondaryValue.append(" ");
+							}
+							finalSecondaryValue.append(secondaryStr);
+						}
+
+						finalMainValue.append(finalSecondaryValue);
 					}
+					basicsInfos.addInfo(mainKey, finalMainValue.toString());
 				}
-
-				if(mode == Mode.MODE_ONE){
-					return bi;
-				}
-			}
-			else{
-				if(mode == Mode.MODE_FULL){
-					logout("ERREUR: "+lRecherche[i]+" ne match pas sur "+strFilm);
+			}else{// La clé est du type annee.duree
+				String value = getPropertiesManager().getValue(key);
+				p = Pattern.compile(value, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+				m = p.matcher(strFilm);
+				if(m.find(globalIndex)){
+					globalIndex = m.group(0).length();
+					int count = m.groupCount();
+					String[] lKey = key.split("\\.");
+					for (int j = 0; j < count; j++) {
+						String strFound = m.group(j+1);
+						basicsInfos.addInfo(lKey[j], strFound);
+					}
 				}
 			}
 		}
-		return bi;
+		return basicsInfos;
 	}
 
 	protected String transfo(String motCle) {//remplace les blancs par un '+'
@@ -296,27 +284,6 @@ public class SiteConnection extends SocketConnection{
 	}
 
 
-	/**
-	 * @deprecated
-	 * @param currentLine
-	 * @param precedentLine
-	 * @param br
-	 * @return
-	 * @throws IOException
-	 */
-	private String traiteChunkNR(String currentLine, String precedentLine, BufferedReader br) throws IOException {
-		Matcher m = patternChunk.matcher(currentLine);
-		if(m.matches()){
-			String nextLine = br.readLine();
-			if(nextLine == null){//S�curit�: n'arrive jamais dans le cas de chunk
-				return currentLine;
-			}
-			currentLine = precedentLine+nextLine;
-		}
-		
-		return currentLine;
-	}
-	
 	protected SitePropertiesManager getPropertiesManager() {
 		return propertiesManager;
 	}
@@ -324,16 +291,6 @@ public class SiteConnection extends SocketConnection{
 
 	protected void setPropertiesManager(SitePropertiesManager propertiesManager) {
 		this.propertiesManager = propertiesManager;
-	}
-
-
-	public StringBuffer getAllLinesInOne() {
-		return allLinesInOne;
-	}
-
-
-	public void setAllLinesInOne(StringBuffer allLinesInOne) {
-		this.allLinesInOne = allLinesInOne;
 	}
 
 

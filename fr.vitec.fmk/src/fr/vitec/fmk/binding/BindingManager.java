@@ -11,11 +11,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.WorkbenchPart;
 
+import fr.vitec.fmk.file.FileUtil;
 import fr.vitec.fmk.reflect.ReflectUtil;
 
 public class BindingManager {
 
-	private static final String TEXT_SEP = ", ";
+	private static final String TEXT_SEP = FileUtil.LINE_SEPARATOR;
 	private int controlPrefixLength;
 	List<Control> controls;
 	private Object model;

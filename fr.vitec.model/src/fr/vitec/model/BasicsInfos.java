@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import fr.vitec.fmk.exception.VitecException;
+import fr.vitec.fmk.file.FileUtil;
 
 public class BasicsInfos {
 	public static final String HTTP_BEGIN = "http://";
@@ -42,7 +43,7 @@ public class BasicsInfos {
 	private Map<String, Object>mInfos = new HashMap<String, Object>();
 	
 	
-	public void AddInfo(String key, Object value){
+	public void addInfo(String key, Object value){
 		
 		if(this.getInfo(key)!=null){
 			return;
@@ -51,16 +52,16 @@ public class BasicsInfos {
 		
 		if(key.equals(TITRE)){
 			String val = (String)value;
-			val = val.replaceAll(BOLD_BEGIN, "");
-			val = val.replaceAll(BOLD_END, "");
+//			val = val.replaceAll(BOLD_BEGIN, "");
+//			val = val.replaceAll(BOLD_END, "");
 			this.setTitre(val);
 			mInfos.put(key, val);
 		}
 		else if(key.equals(ACTEURS)){
 			String val = (String)value;
-			if(val.startsWith(ACTEURS_PREFIX)){
-				val = val.substring(ACTEURS_PREFIX.length());
-			}
+//			if(val.startsWith(ACTEURS_PREFIX)){
+//				val = val.substring(ACTEURS_PREFIX.length());
+//			}
 			String lStr[] = val.split(",");
 			
 			for (String str : lStr) {
@@ -79,9 +80,9 @@ public class BasicsInfos {
 		}
 		else if(key.equals(REALISATEUR)){
 			String val = (String)value;
-			if(val.startsWith(REALISATEUR_PREFIX)){
-				val = val.substring(REALISATEUR_PREFIX.length());
-			}
+//			if(val.startsWith(REALISATEUR_PREFIX)){
+//				val = val.substring(REALISATEUR_PREFIX.length());
+//			}
 			this.setRealisateur(val);
 			mInfos.put(key, val);
 		}
@@ -92,7 +93,8 @@ public class BasicsInfos {
 		}
 		else if(key.equals(SYNOPSIS)){
 			String s = (String)value;
-			s = s.replaceAll("< *br */? *>", "");
+			s = s.replaceAll("(< *br */? *>)+", FileUtil.LINE_SEPARATOR);
+			s = s.replaceAll("\\.([\\w\\t ]+)", "."+FileUtil.LINE_SEPARATOR+"$1");
 			mInfos.put(key, s);
 			this.setSynopsis(s);
 		}

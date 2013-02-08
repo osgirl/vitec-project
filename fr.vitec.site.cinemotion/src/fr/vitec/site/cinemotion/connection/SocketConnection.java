@@ -59,7 +59,7 @@ public class SocketConnection {
 			out = sock.getOutputStream();
 			out.write(header.getBytes());
 			out.flush();
-			source = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+			source = new BufferedReader(new InputStreamReader(sock.getInputStream(), "ISO-8859-1"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

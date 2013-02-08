@@ -63,19 +63,19 @@ public class FindFilmInfoFromCinemotion extends FindFilmInfo {
 			+"HTTP/1.1 200 OK\n"
 			+"Server: Apache\n";
 		//sleep();
-		info = siteConnection.fillFullInfos(info, header);
+		info = siteConnection.sendRequestAndFillFullInfos(info, header);
 		
-		if(info.getInfo(BasicsInfos.SYNOPSIS)==null){
-
-			StringBuffer line = siteConnection.getAllLinesInOne();
-			//System.out.println(line);
-			String synRegExp = propertiesManager.getValue("synopsis.multilignes");
-			Pattern p = Pattern.compile(synRegExp, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-			Matcher m = p.matcher(line);
-			if(m.find()){
-				info.AddInfo("synopsis", m.group(1));
-			}
-		}
+//		if(info.getInfo(BasicsInfos.SYNOPSIS)==null){
+//
+//			StringBuffer line = siteConnection.getAllLinesInOne();
+//			//System.out.println(line);
+//			String synRegExp = propertiesManager.getValue("synopsis.multilignes");
+//			Pattern p = Pattern.compile(synRegExp, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+//			Matcher m = p.matcher(line);
+//			if(m.find()){
+//				info.AddInfo("synopsis", m.group(1));
+//			}
+//		}
 		
 		return info;
 	}

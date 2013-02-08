@@ -28,6 +28,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.ViewPart;
 
 import fr.vitec.fmk.binding.BindingManager;
+import fr.vitec.fmk.file.FileUtil;
 import fr.vitec.fmk.image.ImageUtil;
 import fr.vitec.fmk.resource.SWTResourceManager;
 import fr.vitec.main.message.Messages;
@@ -38,8 +39,8 @@ public class ViewPartDetails extends ViewPart {
 
 	public static final String ID = "fr.vitec.main.viewDetails"; //$NON-NLS-1$
 	public static Map<FilmType, Image> images = new HashMap<FilmType, Image>();
-	
-	
+
+
 	private ISelectionListener listener = new ISelectionListener() {
 		public void selectionChanged(IWorkbenchPart sourcepart, ISelection selection) {
 			// we ignore our own selections
@@ -50,7 +51,7 @@ public class ViewPartDetails extends ViewPart {
 	};
 
 	private final FormToolkit toolkit = new FormToolkit(Display.getCurrent());
-	
+
 	BindingManager bindingManager;
 	private Action action;
 
@@ -69,7 +70,7 @@ public class ViewPartDetails extends ViewPart {
 
 	private Label lblImage;
 	private Text txtReference;
-	
+
 	public ViewPartDetails() {
 	}
 
@@ -81,7 +82,7 @@ public class ViewPartDetails extends ViewPart {
 		Section sctnNewSection = toolkit.createSection(parent, Section.EXPANDED | Section.TWISTIE | Section.TITLE_BAR);
 		GridData gd_sctnNewSection = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 3);
 		gd_sctnNewSection.widthHint = 659;
-		gd_sctnNewSection.heightHint = 415;
+		gd_sctnNewSection.heightHint = 479;
 		sctnNewSection.setLayoutData(gd_sctnNewSection);
 		sctnNewSection.setSize(227, 80);
 		toolkit.paintBordersFor(sctnNewSection);
@@ -129,78 +130,78 @@ public class ViewPartDetails extends ViewPart {
 
 		txtActor = toolkit.createText(composite, "New Text", SWT.V_SCROLL | SWT.MULTI); //$NON-NLS-1$
 		txtActor.setText(""); //$NON-NLS-1$
-		txtActor.setBounds(262, 230, 309, 21);
+		txtActor.setBounds(262, 230, 309, 68);
 
 		Label lblRsum = toolkit.createLabel(composite, Messages.ViewPartDetails_17, SWT.NONE);
-		lblRsum.setBounds(193, 264, 49, 13);
+		lblRsum.setBounds(22, 301, 49, 13);
 
-		txtSummary = toolkit.createText(composite, "", SWT.V_SCROLL); //$NON-NLS-1$
+		txtSummary = toolkit.createText(composite, "", SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI); //$NON-NLS-1$
 		txtSummary.setText(""); //$NON-NLS-1$
-		txtSummary.setBounds(264, 261, 309, 120);
+		txtSummary.setBounds(23, 320, 550, 120);
 
 		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(listener);
 
 		bindingManager = new BindingManager();
-		
+
 		Label label = new Label(composite, SWT.NONE);
 		label.setBounds(193, 65, 49, 13);
 		toolkit.adapt(label, true, true);
 		label.setText(Messages.ViewPartDetails_7);
-		
+
 		Label lblNewLabel = new Label(composite, SWT.NONE);
 		lblNewLabel.setBounds(193, 96, 69, 15);
 		toolkit.adapt(lblNewLabel, true, true);
 		lblNewLabel.setText(Messages.ViewPartDetails_9);
-		
+
 		Label lblNewLabel_1 = new Label(composite, SWT.NONE);
 		lblNewLabel_1.setBounds(193, 131, 37, 13);
 		toolkit.adapt(lblNewLabel_1, true, true);
 		lblNewLabel_1.setText(Messages.ViewPartDetails_8);
-		
+
 		Label lblDure = new Label(composite, SWT.NONE);
 		lblDure.setBounds(193, 164, 63, 13);
 		toolkit.adapt(lblDure, true, true);
 		lblDure.setText(Messages.ViewPartDetails_10);
-																new Label(parent, SWT.NONE);
-														
-																Section sctnInformationsTechniques = toolkit.createSection(parent, Section.EXPANDED | Section.TWISTIE | Section.TITLE_BAR);
-																GridData gd_sctnInformationsTechniques = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-																gd_sctnInformationsTechniques.heightHint = 136;
-																gd_sctnInformationsTechniques.widthHint = 658;
-																sctnInformationsTechniques.setLayoutData(gd_sctnInformationsTechniques);
-																sctnInformationsTechniques.setDescription(""); //$NON-NLS-1$
-																toolkit.paintBordersFor(sctnInformationsTechniques);
-																sctnInformationsTechniques.setText(Messages.ViewPartDetails_21);
-																
-																		Composite composite_1 = toolkit.createComposite(sctnInformationsTechniques, SWT.WRAP);
-																		toolkit.paintBordersFor(composite_1);
-																		sctnInformationsTechniques.setClient(composite_1);
-																		
-																				Label lblTitreSurLe = toolkit.createLabel(composite_1, Messages.ViewPartDetails_22, SWT.NONE);
-																				lblTitreSurLe.setBounds(10, 15, 94, 13);
-																				
-																						txtTitleDisk = toolkit.createText(composite_1, "", SWT.NONE); //$NON-NLS-1$
-																						txtTitleDisk.setText(""); //$NON-NLS-1$
-																						txtTitleDisk.setBounds(110, 12, 416, 21);
-																						
-																								Label lblChemin = toolkit.createLabel(composite_1, Messages.ViewPartDetails_25, SWT.NONE);
-																								lblChemin.setBounds(10, 48, 49, 13);
-																								
-																										txtPath = toolkit.createText(composite_1, "", SWT.NONE);//$NON-NLS-1$
-																										txtPath.setText(""); //$NON-NLS-1$
-																										txtPath.setBounds(110, 45, 416, 21);
-																										bindingManager.addControls(this, lblTitle, lblYear, lblGenre, 
-																												txtActor, lblCountry, lblRuntime, txtDirector, txtSummary, txtTitleDisk, txtPath);
-																										
-																										txtReference = new Text(composite_1, SWT.BORDER);
-																										txtReference.setText("");
-																										txtReference.setBounds(110, 78, 416, 21);
-																										toolkit.adapt(txtReference, true, true);
-																										
-																										Label lblReferenceTxt = new Label(composite_1, SWT.NONE);
-																										lblReferenceTxt.setBounds(10, 81, 79, 13);
-																										toolkit.adapt(lblReferenceTxt, true, true);
-																										lblReferenceTxt.setText(Messages.ViewPartDetails_ref);
+		new Label(parent, SWT.NONE);
+
+		Section sctnInformationsTechniques = toolkit.createSection(parent, Section.EXPANDED | Section.TWISTIE | Section.TITLE_BAR);
+		GridData gd_sctnInformationsTechniques = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_sctnInformationsTechniques.heightHint = 136;
+		gd_sctnInformationsTechniques.widthHint = 658;
+		sctnInformationsTechniques.setLayoutData(gd_sctnInformationsTechniques);
+		sctnInformationsTechniques.setDescription(""); //$NON-NLS-1$
+		toolkit.paintBordersFor(sctnInformationsTechniques);
+		sctnInformationsTechniques.setText(Messages.ViewPartDetails_21);
+
+		Composite composite_1 = toolkit.createComposite(sctnInformationsTechniques, SWT.WRAP);
+		toolkit.paintBordersFor(composite_1);
+		sctnInformationsTechniques.setClient(composite_1);
+
+		Label lblTitreSurLe = toolkit.createLabel(composite_1, Messages.ViewPartDetails_22, SWT.NONE);
+		lblTitreSurLe.setBounds(10, 15, 94, 13);
+
+		txtTitleDisk = toolkit.createText(composite_1, "", SWT.NONE); //$NON-NLS-1$
+		txtTitleDisk.setText(""); //$NON-NLS-1$
+		txtTitleDisk.setBounds(110, 12, 416, 21);
+
+		Label lblChemin = toolkit.createLabel(composite_1, Messages.ViewPartDetails_25, SWT.NONE);
+		lblChemin.setBounds(10, 48, 49, 13);
+
+		txtPath = toolkit.createText(composite_1, "", SWT.NONE);//$NON-NLS-1$
+		txtPath.setText(""); //$NON-NLS-1$
+		txtPath.setBounds(110, 45, 416, 21);
+		bindingManager.addControls(this, lblTitle, lblYear, lblGenre, 
+				txtActor, lblCountry, lblRuntime, txtDirector, txtSummary, txtTitleDisk, txtPath, txtReference);
+
+		txtReference = new Text(composite_1, SWT.BORDER);
+		txtReference.setText("");
+		txtReference.setBounds(110, 78, 416, 21);
+		toolkit.adapt(txtReference, true, true);
+
+		Label lblReferenceTxt = new Label(composite_1, SWT.NONE);
+		lblReferenceTxt.setBounds(10, 81, 79, 13);
+		toolkit.adapt(lblReferenceTxt, true, true);
+		lblReferenceTxt.setText(Messages.ViewPartDetails_ref);
 		createActions();
 		initializeToolBar();
 		initializeMenu();
@@ -215,7 +216,7 @@ public class ViewPartDetails extends ViewPart {
 			action = new Action() {				@Override
 				public ImageDescriptor getImageDescriptor() {
 					return new ImageDescriptor() {
-						
+
 						@Override
 						public ImageData getImageData() {
 							Image image = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_SAVE_EDIT);
@@ -227,7 +228,7 @@ public class ViewPartDetails extends ViewPart {
 				public void run() {
 					updateModel();
 				}
-				
+
 			};
 		}
 	}
@@ -261,7 +262,7 @@ public class ViewPartDetails extends ViewPart {
 
 	public void showSelection(IWorkbenchPart sourcepart, ISelection selection) {
 		//setContentDescription(sourcepart.getTitle() + " (" + selection.getClass().getName() + ")");
-		
+
 		if (!selection.isEmpty() && selection instanceof TreeSelection) {
 			TreeSelection treeSelection = (TreeSelection)selection;
 			Object firstElement = treeSelection.getFirstElement();
@@ -274,19 +275,19 @@ public class ViewPartDetails extends ViewPart {
 	private void bind(FilmType film) {
 		bindingManager.setModel(film);
 	}
-	
+
 	private void updateModel() {
 		bindingManager.updateModel();
 		BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {
-			
+
 			@Override
 			public void run() {
 				VitecModel.getInstance().save();
 			}
 		}) ;
-		
+
 	}
-	
+
 	public void setFilm(FilmType film) {
 		this.film = film;
 		bind(film);
