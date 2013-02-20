@@ -6,10 +6,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.part.WorkbenchPart;
 
 import fr.vitec.fmk.file.FileUtil;
 import fr.vitec.fmk.reflect.ReflectUtil;
@@ -20,7 +23,7 @@ public class BindingManager {
 	private int controlPrefixLength;
 	List<Control> controls;
 	private Object model;
-	private Object view;
+	private DirtyView view;
 
 	public class PairControlName{
 		private Control control;
@@ -48,9 +51,26 @@ public class BindingManager {
 		controls = new ArrayList<Control>();
 	}
 
-	public void addControls(WorkbenchPart view, Control ... controls) {
+	public void addControls(DirtyView view, Control ... controls) {
 		this.view = view;
 		this.controls.addAll(Arrays.asList(controls));
+		
+		for (Control control : controls) {
+			if(control instanceof Text){
+				((Text)control).addKeyListener(new KeyListener() {
+					
+					@Override
+					public void keyReleased(KeyEvent e) {
+					}
+					
+					@Override
+					public void keyPressed(KeyEvent e) {
+						BindingManager.this.view.setDirty(true);
+						
+					}
+				});
+			}
+		}
 	}
 
 	public void setModel(Object object) {

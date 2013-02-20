@@ -3,6 +3,7 @@ package fr.vitec.main;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -19,6 +20,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
@@ -28,14 +30,14 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.ViewPart;
 
 import fr.vitec.fmk.binding.BindingManager;
-import fr.vitec.fmk.file.FileUtil;
+import fr.vitec.fmk.binding.DirtyView;
 import fr.vitec.fmk.image.ImageUtil;
 import fr.vitec.fmk.resource.SWTResourceManager;
 import fr.vitec.main.message.Messages;
 import fr.vitec.model.VitecModel;
 import fr.vitec.model.xmlbinding.FilmType;
 
-public class ViewPartDetails extends ViewPart {
+public class ViewPartDetails extends ViewPart implements DirtyView, ISaveablePart{
 
 	public static final String ID = "fr.vitec.main.viewDetails"; //$NON-NLS-1$
 	public static Map<FilmType, Image> images = new HashMap<FilmType, Image>();
@@ -53,7 +55,7 @@ public class ViewPartDetails extends ViewPart {
 	private final FormToolkit toolkit = new FormToolkit(Display.getCurrent());
 
 	BindingManager bindingManager;
-	private Action action;
+	//private Action action;
 
 	private Text txtDirector;
 	private Text txtActor;
@@ -70,6 +72,7 @@ public class ViewPartDetails extends ViewPart {
 
 	private Label lblImage;
 	private Text txtReference;
+	private boolean dirty = false;
 
 	public ViewPartDetails() {
 	}
@@ -203,43 +206,44 @@ public class ViewPartDetails extends ViewPart {
 		lblReferenceTxt.setBounds(10, 81, 79, 13);
 		toolkit.adapt(lblReferenceTxt, true, true);
 		lblReferenceTxt.setText(Messages.ViewPartDetails_ref);
-		createActions();
+//		createActions();
 		initializeToolBar();
 		initializeMenu();
 	}
 
-	/**
-	 * Create the actions.
-	 */
-	private void createActions() {
-		// Create the actions
-		{
-			action = new Action() {				@Override
-				public ImageDescriptor getImageDescriptor() {
-					return new ImageDescriptor() {
-
-						@Override
-						public ImageData getImageData() {
-							Image image = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_SAVE_EDIT);
-							return image.getImageData();
-						}
-					};   
-				}
-				@Override
-				public void run() {
-					updateModel();
-				}
-
-			};
-		}
-	}
+//	/**
+//	 * Create the actions.
+//	 */
+//	private void createActions() {
+//		// Create the actions
+//		{
+//			action = new Action() {//				@Override
+//				public ImageDescriptor getImageDescriptor() {
+//					return new ImageDescriptor() {
+//
+//						@Override
+//						public ImageData getImageData() {
+//							Image image = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_SAVE_EDIT);
+//							return image.getImageData();
+//						}
+//					};   
+//				}
+//				@Override
+//				public void run() {
+//					updateModel();
+//				}
+//
+//			};
+//		}
+//	}
 
 	/**
 	 * Initialize the toolbar.
 	 */
 	private void initializeToolBar() {
-		IToolBarManager tbm = getViewSite().getActionBars().getToolBarManager();
-		tbm.add(action);
+		//IToolBarManager tbm = getViewSite().getActionBars().getToolBarManager();
+		//action.setEnabled(false);
+		//tbm.add(action);
 	}
 
 	/**
@@ -299,5 +303,44 @@ public class ViewPartDetails extends ViewPart {
 			images.put(film, image);
 		}
 		lblImage.setImage(image);
+	}
+
+	@Override
+	public void doSave(IProgressMonitor monitor) {
+		//System.out.println("doSave this.dirty = false");
+		updateModel();
+		this.dirty = false;
+		firePropertyChange(PROP_DIRTY); 
+	}
+
+	@Override
+	public void doSaveAs() {
+		//System.out.println("doSaveAs this.dirty = false");
+		this.dirty = false;
+	}
+
+	@Override
+	public boolean isDirty() {
+		//System.out.println("isDirty "+this.dirty);
+		return this.dirty;
+	}
+
+	@Override
+	public boolean isSaveAsAllowed() {
+		//System.out.println("isSaveAsAllowed true");
+		return false;
+	}
+
+	@Override
+	public boolean isSaveOnCloseNeeded() {
+		//System.out.println("isSaveOnCloseNeeded true");
+		return true;
+	}
+
+	@Override
+	public void setDirty(boolean dirty) {
+		//System.out.println("setDirty "+dirty);
+		this.dirty  = dirty;
+		firePropertyChange(PROP_DIRTY); 
 	}
 }

@@ -32,7 +32,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setInitialSize(new Point((int)(dim.getWidth()*COEF), 
 		(int)(dim.getHeight()*COEF))); 
 
-		configurer.setShowCoolBar(false);
+		configurer.setShowCoolBar(true);
 		configurer.setShowStatusLine(false);
 		
 		configurer.setShowPerspectiveBar(true);

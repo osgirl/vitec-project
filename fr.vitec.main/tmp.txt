@@ -24,5 +24,3 @@ sm2qB8cU7Cr9
 - Gestion suppression dans le tableau d'analyse
 - Maj plugin cinemotion
 - Gérer tri/vue pas genre
-
-
