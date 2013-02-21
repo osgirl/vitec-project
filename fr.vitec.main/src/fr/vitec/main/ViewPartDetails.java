@@ -4,27 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISaveablePart;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ISaveablePart2;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.ViewPart;
@@ -37,20 +29,20 @@ import fr.vitec.main.message.Messages;
 import fr.vitec.model.VitecModel;
 import fr.vitec.model.xmlbinding.FilmType;
 
-public class ViewPartDetails extends ViewPart implements DirtyView, ISaveablePart{
+public class ViewPartDetails extends ViewPart implements DirtyView, ISaveablePart2{
 
 	public static final String ID = "fr.vitec.main.viewDetails"; //$NON-NLS-1$
 	public static Map<FilmType, Image> images = new HashMap<FilmType, Image>();
 
 
-	private ISelectionListener listener = new ISelectionListener() {
-		public void selectionChanged(IWorkbenchPart sourcepart, ISelection selection) {
-			// we ignore our own selections
-			if (sourcepart != ViewPartDetails.this) {
-				showSelection(sourcepart, selection);
-			}
-		}
-	};
+//	private ISelectionListener listener = new ISelectionListener() {
+//		public void selectionChanged(IWorkbenchPart sourcepart, ISelection selection) {
+//			// we ignore our own selections
+//			if (sourcepart != ViewPartDetails.this) {
+//				showSelection(sourcepart, selection);
+//			}
+//		}
+//	};
 
 	private final FormToolkit toolkit = new FormToolkit(Display.getCurrent());
 
@@ -142,7 +134,7 @@ public class ViewPartDetails extends ViewPart implements DirtyView, ISaveablePar
 		txtSummary.setText(""); //$NON-NLS-1$
 		txtSummary.setBounds(23, 320, 550, 120);
 
-		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(listener);
+//		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(listener);
 
 		bindingManager = new BindingManager();
 
@@ -261,21 +253,21 @@ public class ViewPartDetails extends ViewPart implements DirtyView, ISaveablePar
 	@Override
 	public void dispose() {
 		toolkit.dispose();
-		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(listener);
+//		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(listener);
 		super.dispose();
 	}
 
-	public void showSelection(IWorkbenchPart sourcepart, ISelection selection) {
-		//setContentDescription(sourcepart.getTitle() + " (" + selection.getClass().getName() + ")");
-
-		if (!selection.isEmpty() && selection instanceof TreeSelection) {
-			TreeSelection treeSelection = (TreeSelection)selection;
-			Object firstElement = treeSelection.getFirstElement();
-			if(firstElement instanceof FilmType){
-				setFilm((FilmType)firstElement);
-			}
-		}
-	}
+//	public void showSelection(IWorkbenchPart sourcepart, ISelection selection) {
+//		//setContentDescription(sourcepart.getTitle() + " (" + selection.getClass().getName() + ")");
+//
+//		if (!selection.isEmpty() && selection instanceof TreeSelection) {
+//			TreeSelection treeSelection = (TreeSelection)selection;
+//			Object firstElement = treeSelection.getFirstElement();
+//			if(firstElement instanceof FilmType){
+//				setFilm((FilmType)firstElement);
+//			}
+//		}
+//	}
 
 	private void bind(FilmType film) {
 		bindingManager.setModel(film);
@@ -293,7 +285,23 @@ public class ViewPartDetails extends ViewPart implements DirtyView, ISaveablePar
 
 	}
 
-	public void setFilm(FilmType film) {
+	public boolean setFilm(FilmType film) {
+		
+		if(this.film == film){
+			return true;
+		}
+		
+		if(this.isDirty()){
+			int res = promptToSaveOnClose();
+			if(res == ISaveablePart2.YES){
+				doSave(null);
+			}else if(res == ISaveablePart2.CANCEL){
+				return false;
+			}
+			this.dirty = false;
+			firePropertyChange(PROP_DIRTY);
+		}
+		
 		this.film = film;
 		bind(film);
 		Image image = images.get(film);
@@ -303,6 +311,8 @@ public class ViewPartDetails extends ViewPart implements DirtyView, ISaveablePar
 			images.put(film, image);
 		}
 		lblImage.setImage(image);
+		
+		return true;
 	}
 
 	@Override
@@ -342,5 +352,20 @@ public class ViewPartDetails extends ViewPart implements DirtyView, ISaveablePar
 		//System.out.println("setDirty "+dirty);
 		this.dirty  = dirty;
 		firePropertyChange(PROP_DIRTY); 
+	}
+
+	@Override
+	public int promptToSaveOnClose() {
+		MessageDialog dialog = new MessageDialog(this.getViewSite().getShell(), "Sauvegarde", null, "Sauvegarder les changements ?", MessageDialog.QUESTION, new String[]{IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL, IDialogConstants.CANCEL_LABEL}, 0);
+		final int dialogResult = dialog.open();
+		
+		if(dialogResult == 0){
+			doSave(null);
+			return ISaveablePart2.YES;
+		}else if(dialogResult == 1){
+			return ISaveablePart2.NO;
+		}else{
+			return ISaveablePart2.CANCEL;
+		}
 	}
 }

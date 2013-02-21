@@ -3,7 +3,6 @@ package fr.vitec.main;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -12,7 +11,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.part.ViewPart;
@@ -33,7 +31,7 @@ public class ViewPartMaster extends ViewPart implements Observer, IPersistableEl
 
 	private VitecModel model;
 	
-
+	ISelection previousSelection = null;
 	
 	public ViewPartMaster() {
 	}
@@ -47,18 +45,26 @@ public class ViewPartMaster extends ViewPart implements Observer, IPersistableEl
 		viewer.setLabelProvider(new TreeMasterLabelProvider());
 		// Expand 
 		viewer.setAutoExpandLevel(2);
-		getSite().setSelectionProvider(viewer);
+		
+		//Le lien tree / detail view est fait à la main pour gérér les cas ou l'utilisateur décide de rester sur sa vue apres sélection (cas de modification des champs de la vue détail)
+		//getSite().setSelectionProvider(viewer);
 		
 		ISelectionChangedListener listener = new ISelectionChangedListener() {
 			
+
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				 ISelection selection = event.getSelection();
 				if(selection instanceof TreeSelection && ((TreeSelection)selection).getFirstElement() instanceof FilmType){
 					if(!RcpUtils.isActivityEnabled(Id.ACTIVITY_DETAIL)){
 						RcpUtils.activateActivity(Id.ACTIVITY_DETAIL);
-						ViewPartDetails view = (ViewPartDetails) RcpUtils.getView(ViewPartDetails.ID);
-						view.setFilm((FilmType)((TreeSelection)selection).getFirstElement());
+					}
+					ViewPartDetails view = (ViewPartDetails) RcpUtils.getView(ViewPartDetails.ID);
+					boolean res = view.setFilm((FilmType)((TreeSelection)selection).getFirstElement());
+					if(!res){
+						viewer.setSelection(previousSelection, true);
+					}else{
+						previousSelection = selection;
 					}
 				}
 				
