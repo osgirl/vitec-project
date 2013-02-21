@@ -244,6 +244,11 @@ public class VitecModel extends Observable{
 		notifyObservers(filmType);
 	}
 
+	public boolean removeDirectory(DirectoryType directory) {
+		List<DirectoryType> directories = this.getDirectories();
+		return directories.remove(directory);
+	}
+
 
 
 //	public List<FilmType> getFilms(DirectoryType dir) {

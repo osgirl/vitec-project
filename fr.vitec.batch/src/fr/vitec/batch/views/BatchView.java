@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
@@ -27,13 +28,16 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -51,9 +55,8 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.part.ViewPart;
+import org.eclipse.wb.swt.ResourceManager;
 
-import pojo.BaseSample;
 import fr.vitec.batch.dialog.BatchDialog;
 import fr.vitec.batch.extension.FindFilmInfo;
 import fr.vitec.batch.process.BatchManager;
@@ -70,14 +73,12 @@ import fr.vitec.fmk.dialog.RcpFileChooser;
 import fr.vitec.fmk.dialog.UIMessages;
 import fr.vitec.fmk.exception.VitecException;
 import fr.vitec.fmk.resource.SWTResourceManager;
+import fr.vitec.fmk.view.DirtyViewPart;
 import fr.vitec.model.VitecModel;
 import fr.vitec.model.xmlbinding.DirectoryType;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.wb.swt.ResourceManager;
-import org.eclipse.swt.events.SelectionAdapter;
 
 
-public class BatchView extends ViewPart {
+public class BatchView extends DirtyViewPart{
 
 	private static final String EXTENTION_FIND_FILM_ID = "fr.vitec.batch.findFilm";
 
@@ -134,6 +135,7 @@ public class BatchView extends ViewPart {
 		composite_1.setLayout(new FillLayout(SWT.HORIZONTAL));
 		viewer = new TableViewer(composite_1, style);
 		Table table = viewer.getTable();
+		table.setSelection(0);
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 		table.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -175,6 +177,7 @@ public class BatchView extends ViewPart {
 				if(dir != null){
 					VitecModel.getInstance().addDirectory(dir);
 					viewer.refresh();
+					BatchView.this.setDirty(true);
 				}
 			}
 		});
@@ -183,6 +186,26 @@ public class BatchView extends ViewPart {
 		btnAdd.setText("");
 		
 		Button btnSuppr = new Button(composite_3, SWT.NONE);
+		btnSuppr.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				UIMessages.messageDialogYesNo(BatchView.this.getSite().getShell(), "Suppression", "Supprimer le chemin ?", new UIMessages.PostExecution() {
+					
+					@Override
+					public void execute() {
+						DirectoryType directory = getDirectorySelection();
+						boolean res = VitecModel.getInstance().removeDirectory(directory);
+						
+						if(!res){
+							UIMessages.error("Erreur de suppression", "Impossible de supprimer le chemin");
+						}else{
+							viewer.refresh();
+							BatchView.this.setDirty(true);
+						}
+					}
+				});
+			}
+		});
 		btnSuppr.setImage(ResourceManager.getPluginImage("fr.vitec.fmk", "icons/remove.png"));
 		formToolkit.adapt(btnSuppr, true, true);
 		btnSuppr.setText("");
@@ -456,5 +479,17 @@ public class BatchView extends ViewPart {
 			return ChoixFilm.ALWYAYS;
 		}
 		return null;
+	}
+	
+	@Override
+	public void doSave(IProgressMonitor monitor) {
+		BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {
+
+			@Override
+			public void run() {
+				VitecModel.getInstance().save();
+			}
+		}) ;
+		super.doSave(monitor);
 	}
 }

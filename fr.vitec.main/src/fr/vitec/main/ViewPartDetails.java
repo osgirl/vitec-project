@@ -5,8 +5,6 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.graphics.Image;
@@ -19,17 +17,16 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISaveablePart2;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.part.ViewPart;
 
 import fr.vitec.fmk.binding.BindingManager;
-import fr.vitec.fmk.binding.DirtyView;
 import fr.vitec.fmk.image.ImageUtil;
 import fr.vitec.fmk.resource.SWTResourceManager;
+import fr.vitec.fmk.view.DirtyViewPart;
 import fr.vitec.main.message.Messages;
 import fr.vitec.model.VitecModel;
 import fr.vitec.model.xmlbinding.FilmType;
 
-public class ViewPartDetails extends ViewPart implements DirtyView, ISaveablePart2{
+public class ViewPartDetails extends DirtyViewPart {
 
 	public static final String ID = "fr.vitec.main.viewDetails"; //$NON-NLS-1$
 	public static Map<FilmType, Image> images = new HashMap<FilmType, Image>();
@@ -64,7 +61,7 @@ public class ViewPartDetails extends ViewPart implements DirtyView, ISaveablePar
 
 	private Label lblImage;
 	private Text txtReference;
-	private boolean dirty = false;
+	
 
 	public ViewPartDetails() {
 	}
@@ -314,58 +311,11 @@ public class ViewPartDetails extends ViewPart implements DirtyView, ISaveablePar
 		
 		return true;
 	}
-
+	
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		//System.out.println("doSave this.dirty = false");
 		updateModel();
-		this.dirty = false;
-		firePropertyChange(PROP_DIRTY); 
+		super.doSave(monitor);
 	}
 
-	@Override
-	public void doSaveAs() {
-		//System.out.println("doSaveAs this.dirty = false");
-		this.dirty = false;
-	}
-
-	@Override
-	public boolean isDirty() {
-		//System.out.println("isDirty "+this.dirty);
-		return this.dirty;
-	}
-
-	@Override
-	public boolean isSaveAsAllowed() {
-		//System.out.println("isSaveAsAllowed true");
-		return false;
-	}
-
-	@Override
-	public boolean isSaveOnCloseNeeded() {
-		//System.out.println("isSaveOnCloseNeeded true");
-		return true;
-	}
-
-	@Override
-	public void setDirty(boolean dirty) {
-		//System.out.println("setDirty "+dirty);
-		this.dirty  = dirty;
-		firePropertyChange(PROP_DIRTY); 
-	}
-
-	@Override
-	public int promptToSaveOnClose() {
-		MessageDialog dialog = new MessageDialog(this.getViewSite().getShell(), "Sauvegarde", null, "Sauvegarder les changements ?", MessageDialog.QUESTION, new String[]{IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL, IDialogConstants.CANCEL_LABEL}, 0);
-		final int dialogResult = dialog.open();
-		
-		if(dialogResult == 0){
-			doSave(null);
-			return ISaveablePart2.YES;
-		}else if(dialogResult == 1){
-			return ISaveablePart2.NO;
-		}else{
-			return ISaveablePart2.CANCEL;
-		}
-	}
 }

@@ -19,9 +19,12 @@ sm2qB8cU7Cr9
 - Gestion action "Créer un nouvelle base" alors qu'une autre est déjà ouverte
 - Gestion close base
 - Gestion suppression d'un film
-- Gestion mode dirty
-- Gestion sauvegarde améliorée de la base (avec le mode dirty => "voulez-vous sauvegarder la base ?" à la fermeture de l'appli si pas d'enregistrement effectué avant)
-- Gestion suppression dans le tableau d'analyse
 - Maj plugin cinemotion
 - Gérer tri/vue pas genre
 - Changer image
+
+
+DONE
+- Gestion mode dirty
+- Gestion sauvegarde améliorée de la base (avec le mode dirty => "voulez-vous sauvegarder la base ?" à la fermeture de l'appli si pas d'enregistrement effectué avant)
+- Gestion suppression dans le tableau d'analyse
