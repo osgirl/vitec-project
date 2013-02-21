@@ -4,6 +4,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
+import org.eclipse.ui.PlatformUI;
 
 
 import fr.vitec.fmk.dialog.RcpFileChooser;
@@ -14,6 +15,8 @@ import fr.vitec.main.util.id.Id;
 import fr.vitec.model.VitecModel;
 
 public class OpenHandler implements IHandler {
+
+	private static final String SEP = " # ";
 
 	@Override
 	public void addHandlerListener(IHandlerListener handlerListener) {
@@ -43,6 +46,13 @@ public class OpenHandler implements IHandler {
 			VitecModel model = VitecModel.getInstance();
 			model.open(fileName);
 			viewMaster.setInput(model);
+			
+			String currentTitle = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().getText();
+			int idx = currentTitle.lastIndexOf(SEP);
+			if(idx != -1){
+				currentTitle = currentTitle.substring(0, idx); 
+			}
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setText(currentTitle +SEP + fileName);
 		}
 	}
 

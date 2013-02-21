@@ -43,7 +43,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		super.postWindowOpen();
 		RcpUtils.deactivateActivity(Id.ACTIVITY_MASTER);
 		RcpUtils.deactivateActivity(Id.ACTIVITY_DETAIL);
-		RcpUtils.deactivateActivity("fr.vitec.batch.activity.view");
+		RcpUtils.deactivateActivity("fr.vitec.batch.activity.view");//TODO à gérer par point d'extention
 		
 	}
 }
