@@ -6,6 +6,8 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import fr.vitec.fmk.resource.SWTResourceManager;
+import fr.vitec.model.VitecModel;
 import fr.vitec.model.xmlbinding.DirectoryType;
 import fr.vitec.model.xmlbinding.FilmType;
 
@@ -28,7 +30,11 @@ public class TreeMasterLabelProvider extends //LabelProvider{
 		} else {
 			FilmType film = (FilmType) element;
 			text.append(film.getTitle());
-			cell.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE));
+			if(VitecModel.getInstance().isNew(film)){
+				cell.setImage(SWTResourceManager.getPluginImage("icons/IMG_OBJ_FILE_NEW.png"));
+			}else{
+				cell.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE));
+			}
 		}
 		cell.setText(text.toString());
 		cell.setStyleRanges(text.getStyleRanges());

@@ -8,10 +8,10 @@ public class Activator implements BundleActivator {
 
 	private static BundleContext context;
 
-	static BundleContext getContext() {
+	public static BundleContext getContext() {
 		return context;
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
@@ -27,5 +27,6 @@ public class Activator implements BundleActivator {
 	public void stop(BundleContext bundleContext) throws Exception {
 		Activator.context = null;
 	}
+	
 
 }

@@ -2,6 +2,7 @@ package fr.vitec.fmk.view;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISaveablePart2;
 import org.eclipse.ui.part.ViewPart;
 
@@ -57,7 +58,12 @@ public class DirtyViewPart extends ViewPart implements ISaveablePart2,	DirtyView
 	public void setDirty(boolean dirty) {
 		//System.out.println("setDirty "+dirty);
 		this.dirty  = dirty;
-		firePropertyChange(PROP_DIRTY); 
+		 Display.getDefault().asyncExec( new Runnable() { 
+			 								public void run() {
+			 									firePropertyChange(PROP_DIRTY);
+			 								}
+			 							}); 
+		 
 	}
 
 	@Override

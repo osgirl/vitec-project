@@ -8,7 +8,7 @@
  * Contributors:
  *    Google, Inc. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.wb.swt;
+package fr.vitec.fmk.resource;
 
 import java.io.File;
 import java.io.InputStream;
@@ -28,6 +28,8 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.osgi.framework.Bundle;
 
+import fr.vitec.fmk.Activator;
+
 /**
  * Utility class for managing OS resources associated with SWT/JFace controls such as colors, fonts, images,
  * etc.
@@ -42,7 +44,7 @@ import org.osgi.framework.Bundle;
  * @author scheglov_ke
  * @author Dan Rubel
  */
-public class ResourceManager extends SWTResourceManager {
+public class ResourceManager_obsolete extends SWTResourceManager {
 	////////////////////////////////////////////////////////////////////////////
 	//
 	// Image
@@ -242,6 +244,11 @@ public class ResourceManager extends SWTResourceManager {
 		}
 		return null;
 	}
+	
+	public static Image getPluginImage(String path) {
+		return getPluginImage(Activator.getContext().getBundle().getSymbolicName(), path);
+	}
+	
 	/**
 	 * Returns an {@link Image} based on a {@link Bundle} and resource entry path.
 	 * 

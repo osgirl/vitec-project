@@ -29,8 +29,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
 		//configurer.setInitialSize(new Point(400, 300));
 		Dimension dim = java.awt.Toolkit.getDefaultToolkit().getScreenSize(); 
-		configurer.setInitialSize(new Point((int)(dim.getWidth()*COEF), 
-		(int)(dim.getHeight()*COEF))); 
+		configurer.setInitialSize(new Point((int)(dim.getWidth()*COEF), (int)(dim.getHeight()*COEF))); 
 
 		configurer.setShowCoolBar(true);
 		configurer.setShowStatusLine(false);

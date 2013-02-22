@@ -13,9 +13,12 @@ package fr.vitec.fmk.resource;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
@@ -27,6 +30,9 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
+import org.osgi.framework.Bundle;
+
+import fr.vitec.fmk.Activator;
 
 /**
  * Utility class for managing OS resources associated with SWT controls such as colors, fonts, images, etc.
@@ -294,6 +300,81 @@ public class SWTResourceManager {
 			}
 		}
 	}
+	////////////////////////////////////////////////////////////////////////////
+	//
+	// Plugin images support
+	//
+	////////////////////////////////////////////////////////////////////////////
+	public static Image getPluginImage(String path) {
+		return getPluginImage(Activator.getContext().getBundle().getSymbolicName(), path);
+	}
+	
+	/**
+	 * Returns an {@link Image} based on a {@link Bundle} and resource entry path.
+	 * 
+	 * @param symbolicName
+	 *            the symbolic name of the {@link Bundle}.
+	 * @param path
+	 *            the path of the resource entry.
+	 * @return the {@link Image} stored in the file at the specified path.
+	 */
+	public static Image getPluginImage(String symbolicName, String path) {
+		try {
+			URL url = getPluginImageURL(symbolicName, path);
+			if (url != null) {
+				return getPluginImageFromUrl(url);
+			}
+		} catch (Throwable e) {
+			// Ignore any exceptions
+		}
+		return null;
+	}
+	/**
+	 * Returns an {@link URL} based on a {@link Bundle} and resource entry path.
+	 */
+	private static URL getPluginImageURL(String symbolicName, String path) {
+		// try runtime plugins
+		{
+			Bundle bundle = Platform.getBundle(symbolicName);
+			if (bundle != null) {
+				return bundle.getEntry(path);
+			}
+		}
+//		// try design time provider
+//		if (m_designTimePluginResourceProvider != null) {
+//			return m_designTimePluginResourceProvider.getEntry(symbolicName, path);
+//		}
+		// no such resource
+		return null;
+	}
+	
+	/**
+	 * Returns an {@link Image} based on given {@link URL}.
+	 */
+	private static Image getPluginImageFromUrl(URL url) {
+		try {
+			try {
+				String key = url.toExternalForm();
+				Image image = m_imageMap.get(key);
+				if (image == null) {
+					InputStream stream = url.openStream();
+					try {
+						image = getImage(stream);
+						m_imageMap.put(key, image);
+					} finally {
+						stream.close();
+					}
+				}
+				return image;
+			} catch (Throwable e) {
+				// Ignore any exceptions
+			}
+		} catch (Throwable e) {
+			// Ignore any exceptions
+		}
+		return null;
+	}
+	
 	////////////////////////////////////////////////////////////////////////////
 	//
 	// Font

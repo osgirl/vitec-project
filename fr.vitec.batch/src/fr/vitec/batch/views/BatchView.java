@@ -15,6 +15,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
@@ -55,7 +56,6 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.wb.swt.ResourceManager;
 
 import fr.vitec.batch.dialog.BatchDialog;
 import fr.vitec.batch.extension.FindFilmInfo;
@@ -78,7 +78,7 @@ import fr.vitec.model.VitecModel;
 import fr.vitec.model.xmlbinding.DirectoryType;
 
 
-public class BatchView extends DirtyViewPart{
+public class BatchView extends DirtyViewPart {
 
 	private static final String EXTENTION_FIND_FILM_ID = "fr.vitec.batch.findFilm";
 
@@ -181,7 +181,7 @@ public class BatchView extends DirtyViewPart{
 				}
 			}
 		});
-		btnAdd.setImage(ResourceManager.getPluginImage("fr.vitec.fmk", "icons/add.png"));
+		btnAdd.setImage(SWTResourceManager.getPluginImage("icons/add.png"));
 		formToolkit.adapt(btnAdd, true, true);
 		btnAdd.setText("");
 		
@@ -206,7 +206,7 @@ public class BatchView extends DirtyViewPart{
 				});
 			}
 		});
-		btnSuppr.setImage(ResourceManager.getPluginImage("fr.vitec.fmk", "icons/remove.png"));
+		btnSuppr.setImage(SWTResourceManager.getPluginImage("icons/remove.png"));
 		formToolkit.adapt(btnSuppr, true, true);
 		btnSuppr.setText("");
 
@@ -285,6 +285,8 @@ public class BatchView extends DirtyViewPart{
 				
 				
 				batchManager.execute();
+				BatchView.this.setDirty(true);
+				
 			}
 			
 			@Override

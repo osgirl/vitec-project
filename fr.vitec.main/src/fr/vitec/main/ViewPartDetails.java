@@ -91,7 +91,7 @@ public class ViewPartDetails extends DirtyViewPart {
 		lblTitle.setFont(SWTResourceManager.getFont("Tahoma", 16, SWT.BOLD)); //$NON-NLS-1$
 
 		lblImage = toolkit.createLabel(composite, "", SWT.NONE);
-		lblImage.setImage(SWTResourceManager.getImage("D:\\dev\\workspace_test\\fr.vitec.main\\src\\product_lg.gif")); //$NON-NLS-1$
+		//lblImage.setImage(SWTResourceManager.getImage("D:\\dev\\workspace_test\\fr.vitec.main\\src\\product_lg.gif")); //$NON-NLS-1$
 		lblImage.setBounds(10, 10, 167, 202);
 
 		lblYear = new Text(composite, SWT.NONE);

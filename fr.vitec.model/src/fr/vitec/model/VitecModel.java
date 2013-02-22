@@ -25,10 +25,13 @@ import fr.vitec.model.xmlbinding.SiteType;
 
 
 public class VitecModel extends Observable{
+	public static final String MESSAGE_SAVE = "SAVE";
+	
 	private ObjectFactory of;
 	//private List<FilmType> films;
 	private BaseType baseType;
 	private String basePath;
+	private List<FilmType> newFilms;
 	
 	public String getBasePath() {
 		return basePath;
@@ -37,6 +40,7 @@ public class VitecModel extends Observable{
 	private static VitecModel vitecModel = null;
 	
 	private VitecModel() {
+		newFilms = new ArrayList<FilmType>();
 	}
 	
 	public static VitecModel getInstance(){
@@ -199,6 +203,9 @@ public class VitecModel extends Observable{
 	}
 
 	public void save() {
+		newFilms.clear();
+		setChanged();
+		notifyObservers(MESSAGE_SAVE);
 		marshal();
 	}
 
@@ -240,6 +247,7 @@ public class VitecModel extends Observable{
 		String summary = basicFilmInfos.getSynopsis();
 		String urlReference = basicFilmInfos.getFullReference();
 		FilmType filmType = addFilm(imagePath, title, titleDisk, year, fullPath, genre, runtime, country, director, actorsName, summary, urlReference);
+		newFilms.add(filmType);
 		setChanged();
 		notifyObservers(filmType);
 	}
@@ -247,6 +255,10 @@ public class VitecModel extends Observable{
 	public boolean removeDirectory(DirectoryType directory) {
 		List<DirectoryType> directories = this.getDirectories();
 		return directories.remove(directory);
+	}
+
+	public boolean isNew(FilmType film) {
+		return newFilms.contains(film);
 	}
 
 
