@@ -292,11 +292,15 @@ public class ViewPartDetails extends DirtyViewPart {
 			int res = promptToSaveOnClose();
 			if(res == ISaveablePart2.YES){
 				doSave(null);
+			}else if(res == ISaveablePart2.NO){
+				VitecModel.getInstance().notSave();
 			}else if(res == ISaveablePart2.CANCEL){
+				this.currentControl.setFocus();
 				return false;
 			}
 			this.dirty = false;
 			firePropertyChange(PROP_DIRTY);
+			
 		}
 		
 		this.film = film;
@@ -316,6 +320,12 @@ public class ViewPartDetails extends DirtyViewPart {
 	public void doSave(IProgressMonitor monitor) {
 		updateModel();
 		super.doSave(monitor);
+	}
+	
+	@Override
+	public void setDirty(boolean dirty) {
+		VitecModel.getInstance().setDirty(this.film);
+		super.setDirty(dirty);
 	}
 
 }

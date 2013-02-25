@@ -2,6 +2,7 @@ package fr.vitec.fmk.view;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISaveablePart2;
 import org.eclipse.ui.part.ViewPart;
@@ -12,7 +13,9 @@ import fr.vitec.fmk.dialog.UIMessages;
 public class DirtyViewPart extends ViewPart implements ISaveablePart2,	DirtyView {
 
 	protected boolean dirty = false;
+	protected Control currentControl;
 	
+
 	@Override
 	public void createPartControl(Composite parent) {
 		
@@ -57,6 +60,7 @@ public class DirtyViewPart extends ViewPart implements ISaveablePart2,	DirtyView
 	@Override
 	public void setDirty(boolean dirty) {
 		//System.out.println("setDirty "+dirty);
+		currentControl = Display.getCurrent().getFocusControl();
 		this.dirty  = dirty;
 		 Display.getDefault().asyncExec( new Runnable() { 
 			 								public void run() {

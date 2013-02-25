@@ -95,7 +95,15 @@ public class ViewPartMaster extends DirtyViewPart implements Observer, IPersista
 			if(String.valueOf(arg).equals(VitecModel.MESSAGE_SAVE)){
 				setDirty(false);
 				refresh();
-			}else{
+			}else if(String.valueOf(arg).equals(VitecModel.MESSAGE_SET_DIRTY)){
+				refresh();
+				//setDirty(true);
+			}
+			else if(String.valueOf(arg).equals(VitecModel.MESSAGE_UNSAVE)){
+				refresh();
+				//setDirty(false);
+			}
+			else if(String.valueOf(arg).equals(VitecModel.MESSAGE_ADD_FILM)){
 				refresh();
 				setDirty(true);
 			}

@@ -32,6 +32,8 @@ public class TreeMasterLabelProvider extends //LabelProvider{
 			text.append(film.getTitle());
 			if(VitecModel.getInstance().isNew(film)){
 				cell.setImage(SWTResourceManager.getPluginImage("icons/IMG_OBJ_FILE_NEW.png"));
+			}else if(VitecModel.getInstance().isDirty(film)){
+				cell.setImage(SWTResourceManager.getPluginImage("icons/IMG_OBJ_FILE_UPDATED.png"));
 			}else{
 				cell.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE));
 			}

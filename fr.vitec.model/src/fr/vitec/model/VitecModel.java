@@ -25,13 +25,17 @@ import fr.vitec.model.xmlbinding.SiteType;
 
 
 public class VitecModel extends Observable{
-	public static final String MESSAGE_SAVE = "SAVE";
+	public static final String MESSAGE_ADD_FILM 	= "ADD_FILM";
+	public static final String MESSAGE_SET_DIRTY 	= "SET_DIRTY";
+	public static final String MESSAGE_SAVE 		= "SAVE";
+	public static final String MESSAGE_UNSAVE 		= "UNSAVE";
 	
 	private ObjectFactory of;
 	//private List<FilmType> films;
 	private BaseType baseType;
 	private String basePath;
 	private List<FilmType> newFilms;
+	private List<FilmType> dirtyFilms;
 	
 	public String getBasePath() {
 		return basePath;
@@ -41,6 +45,7 @@ public class VitecModel extends Observable{
 	
 	private VitecModel() {
 		newFilms = new ArrayList<FilmType>();
+		dirtyFilms = new ArrayList<FilmType>();
 	}
 	
 	public static VitecModel getInstance(){
@@ -204,6 +209,7 @@ public class VitecModel extends Observable{
 
 	public void save() {
 		newFilms.clear();
+		dirtyFilms.clear();
 		setChanged();
 		notifyObservers(MESSAGE_SAVE);
 		marshal();
@@ -249,7 +255,7 @@ public class VitecModel extends Observable{
 		FilmType filmType = addFilm(imagePath, title, titleDisk, year, fullPath, genre, runtime, country, director, actorsName, summary, urlReference);
 		newFilms.add(filmType);
 		setChanged();
-		notifyObservers(filmType);
+		notifyObservers(MESSAGE_ADD_FILM);
 	}
 
 	public boolean removeDirectory(DirectoryType directory) {
@@ -259,6 +265,22 @@ public class VitecModel extends Observable{
 
 	public boolean isNew(FilmType film) {
 		return newFilms.contains(film);
+	}
+
+	public boolean isDirty(FilmType film) {
+		return dirtyFilms.contains(film);
+	}
+
+	public void setDirty(FilmType film) {
+		dirtyFilms.add(film);
+		setChanged();
+		notifyObservers(MESSAGE_SET_DIRTY);
+	}
+
+	public void notSave() {
+		dirtyFilms.clear();
+		setChanged();
+		notifyObservers(MESSAGE_UNSAVE);
 	}
 
 
