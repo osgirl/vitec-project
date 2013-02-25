@@ -66,6 +66,16 @@
                style="push">
          </command>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:fr.vitec.main.viewMaster">
+         <command
+               commandId="org.eclipse.ui.edit.delete"
+               label="Delete"
+               style="push"
+               tooltip="Suppression des information du film">
+         </command>
+      </menuContribution>
    </extension>
    <extension
          id="product"
@@ -118,6 +128,13 @@
             class="fr.vitec.main.elementfactory.BaseFactory"
             id="fr.vitec.main.factory.base">
       </factory>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="fr.vitec.main.handler.PopupDeleteHandler"
+            commandId="org.eclipse.ui.edit.delete">
+      </handler>
    </extension>
 
 </plugin>

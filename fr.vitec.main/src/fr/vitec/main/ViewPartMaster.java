@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPersistableElement;
 
+import fr.vitec.fmk.contextmenu.ContextMenu;
 import fr.vitec.fmk.rcp.RcpUtils;
 import fr.vitec.fmk.view.DirtyViewPart;
 import fr.vitec.main.elementfactory.BaseFactory;
@@ -72,6 +73,8 @@ public class ViewPartMaster extends DirtyViewPart implements Observer, IPersista
 			}
 		};
 		viewer.addSelectionChangedListener(listener);
+		
+		new ContextMenu(viewer, this.getSite());
 	}
 
 	public void setInput(VitecModel model){

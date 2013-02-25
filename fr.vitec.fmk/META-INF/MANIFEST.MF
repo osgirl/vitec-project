@@ -12,6 +12,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: fr.vitec.fmk,
  fr.vitec.fmk.binding,
+ fr.vitec.fmk.contextmenu,
  fr.vitec.fmk.dialog,
  fr.vitec.fmk.exception,
  fr.vitec.fmk.file,
