@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPersistableElement;
 
@@ -109,8 +110,22 @@ public class ViewPartMaster extends DirtyViewPart implements Observer, IPersista
 			else if(String.valueOf(arg).equals(VitecModel.MESSAGE_ADD_FILM)){
 				refresh();
 				setDirty(true);
+			}else if(String.valueOf(arg).equals(VitecModel.MESSAGE_DELETE)){
+				refresh();
+				setDirty(true);
+				
+				TreeItem firstItem = viewer.getTree().getItem(0).getItem(0);
+				if(firstItem != null){
+					viewer.getTree().select(firstItem);
+					
+					getDetailView().setFilm((FilmType) firstItem.getData());
+				}
 			}
 		}
+	}
+
+	private ViewPartDetails getDetailView() {
+		return  (ViewPartDetails) RcpUtils.getView(ViewPartDetails.ID);
 	}
 
 	@Override

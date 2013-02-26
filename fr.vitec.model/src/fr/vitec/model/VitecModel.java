@@ -29,6 +29,8 @@ public class VitecModel extends Observable{
 	public static final String MESSAGE_SET_DIRTY 	= "SET_DIRTY";
 	public static final String MESSAGE_SAVE 		= "SAVE";
 	public static final String MESSAGE_UNSAVE 		= "UNSAVE";
+	public static final String MESSAGE_DELETE 		= "DELETE";
+	public static final String MESSAGE_DIR_CHANGE	= "DIR_CHANGE";
 	
 	private ObjectFactory of;
 	//private List<FilmType> films;
@@ -86,6 +88,8 @@ public class VitecModel extends Observable{
 
 	public void addDirectory(String path){
 		addDirectory(path, "avi", FileType.FICHIER.value(), true);
+		setChanged();
+		notifyObservers(MESSAGE_DIR_CHANGE);
 	}
 	
 	public void addDirectory(String path, String filter, String fileType, boolean recursive){
@@ -260,6 +264,8 @@ public class VitecModel extends Observable{
 
 	public boolean removeDirectory(DirectoryType directory) {
 		List<DirectoryType> directories = this.getDirectories();
+		setChanged();
+		notifyObservers(MESSAGE_DIR_CHANGE);
 		return directories.remove(directory);
 	}
 
@@ -281,6 +287,19 @@ public class VitecModel extends Observable{
 		dirtyFilms.clear();
 		setChanged();
 		notifyObservers(MESSAGE_UNSAVE);
+	}
+
+	public void deleteFilms(List<FilmType> filmsToDelete) {
+		List<DirectoryType> dirs = baseType.getProperty().getDirectory();
+		for (FilmType filmToDelete : filmsToDelete) {
+			for (DirectoryType dir : dirs) {
+				List<FilmType> films = dir.getFilm();
+				films.remove(filmToDelete);
+				break;
+			}
+		}
+		setChanged();
+		notifyObservers(MESSAGE_DELETE);
 	}
 
 

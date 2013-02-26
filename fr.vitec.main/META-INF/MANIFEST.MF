@@ -15,6 +15,7 @@ Require-Bundle: fr.vitec.fmk;bundle-version="1.0.0",
  org.eclipse.core.databinding.observable,
  org.eclipse.core.databinding.property,
  org.eclipse.jface.databinding,
- com.ibm.icu
+ com.ibm.icu,
+ org.eclipse.core.expressions;bundle-version="3.4.300"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

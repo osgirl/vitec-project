@@ -3,6 +3,8 @@ package fr.vitec.batch.views;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -15,7 +17,6 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
@@ -78,7 +79,7 @@ import fr.vitec.model.VitecModel;
 import fr.vitec.model.xmlbinding.DirectoryType;
 
 
-public class BatchView extends DirtyViewPart {
+public class BatchView extends DirtyViewPart implements Observer{
 
 	private static final String EXTENTION_FIND_FILM_ID = "fr.vitec.batch.findFilm";
 
@@ -107,6 +108,7 @@ public class BatchView extends DirtyViewPart {
 	 * The constructor.
 	 */
 	public BatchView() {
+		VitecModel.getInstance().addObserver(this);
 	}
 
 	/**
@@ -177,7 +179,6 @@ public class BatchView extends DirtyViewPart {
 				if(dir != null){
 					VitecModel.getInstance().addDirectory(dir);
 					viewer.refresh();
-					BatchView.this.setDirty(true);
 				}
 			}
 		});
@@ -200,7 +201,6 @@ public class BatchView extends DirtyViewPart {
 							UIMessages.error("Erreur de suppression", "Impossible de supprimer le chemin");
 						}else{
 							viewer.refresh();
-							BatchView.this.setDirty(true);
 						}
 					}
 				});
@@ -285,7 +285,6 @@ public class BatchView extends DirtyViewPart {
 				
 				
 				batchManager.execute();
-				BatchView.this.setDirty(true);
 				
 			}
 			
@@ -493,5 +492,18 @@ public class BatchView extends DirtyViewPart {
 			}
 		}) ;
 		super.doSave(monitor);
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		if(o instanceof VitecModel){
+			if(String.valueOf(arg).equals(VitecModel.MESSAGE_SAVE)){
+				setDirty(false);
+			}else if(String.valueOf(arg).equals(VitecModel.MESSAGE_ADD_FILM)){
+				setDirty(true);
+			}else if(String.valueOf(arg).equals(VitecModel.MESSAGE_DIR_CHANGE)){
+				setDirty(true);
+			}
+		}		
 	}
 }

@@ -60,7 +60,9 @@ public class DirtyViewPart extends ViewPart implements ISaveablePart2,	DirtyView
 	@Override
 	public void setDirty(boolean dirty) {
 		//System.out.println("setDirty "+dirty);
-		currentControl = Display.getCurrent().getFocusControl();
+		if(Display.getCurrent() != null){
+			currentControl = Display.getCurrent().getFocusControl();
+		}
 		this.dirty  = dirty;
 		 Display.getDefault().asyncExec( new Runnable() { 
 			 								public void run() {
