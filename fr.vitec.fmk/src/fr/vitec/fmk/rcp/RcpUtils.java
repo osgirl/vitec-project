@@ -67,14 +67,27 @@ public class RcpUtils {
 		return newEnabledActivities;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void deactivateActivity(String activityId){
 		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		IWorkbenchActivitySupport activitySupport = window.getWorkbench().getActivitySupport();
-		Set<String> enabledActivities = new HashSet<String>();
+		IActivityManager activityManager = activitySupport.getActivityManager();
+		Set<String> enabledActivities = activityManager.getEnabledActivityIds();
 		Set<String> newEnabledActivities = getNewEnabledActivities(enabledActivities);
 		newEnabledActivities.remove(activityId);
 		
-		activitySupport.setEnabledActivityIds(enabledActivities);
+		activitySupport.setEnabledActivityIds(newEnabledActivities);
+		// Now I have to reset the perspective to update also the views
+		window.getActivePage().resetPerspective();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static void deactivateAllActivities(){
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		IWorkbenchActivitySupport activitySupport = window.getWorkbench().getActivitySupport();
+		Set<String> newEnabledActivities = new HashSet<String>(); //Vide
+				
+		activitySupport.setEnabledActivityIds(newEnabledActivities);
 		// Now I have to reset the perspective to update also the views
 		window.getActivePage().resetPerspective();
 	}

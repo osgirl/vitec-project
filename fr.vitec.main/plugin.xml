@@ -87,6 +87,10 @@
                name="windowImages"
                value="icons/alt_window_16.gif,icons/alt_window_32.gif">
          </property>
+         <property
+               name="appName"
+               value="%product.name">
+         </property>
       </product>
    </extension>
    <extension
@@ -119,6 +123,7 @@
       </activity>
       <activityPatternBinding
             activityId="fr.vitec.main.activity.view2"
+            isEqualityPattern="false"
             pattern="fr.vitec.main/fr.vitec.main.viewDetails">
       </activityPatternBinding>
    </extension>

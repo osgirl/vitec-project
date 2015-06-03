@@ -87,7 +87,7 @@ public class BatchManager {
 				String titleDisk = getSimpleName(file);
 				FilmType film = VitecModel.getInstance().getFilmByTitleDisk(titleDisk);
 				//Si le model ne contient pas deja le film courant
-				//if(film == null){
+				if(film == null){
 					List<BasicsInfos> basicFilmsInfos = site.sendRequestAndGetBasicsInfos(titleDisk);
 					BasicsInfos basicFilmInfos = null;
 					if(!basicFilmsInfos.isEmpty()){
@@ -97,9 +97,9 @@ public class BatchManager {
 							VitecModel.getInstance().addFilm(basicFilmInfos, path, titleDisk);
 						}
 					}
-				//}else{//Mise à jour du chemin
+				}else{//Mise à jour du chemin
 					film.setPath(path);
-				//}
+				}
 				batchLogger.logInfo(titleDisk);
 				progressManager.progress();
 			}

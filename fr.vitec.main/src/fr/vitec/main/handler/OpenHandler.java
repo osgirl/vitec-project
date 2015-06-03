@@ -30,6 +30,11 @@ public class OpenHandler implements IHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
+		
+		if(VitecModel.getInstance().getBaseType() != null){
+			RcpUtils.deactivateAllActivities();
+		}
+		
 		String fileName = new RcpFileChooser().openFile(RcpFileChooser.XML_EXTENTION);
 		open(fileName);
 
@@ -38,22 +43,26 @@ public class OpenHandler implements IHandler {
 
 	public void open(String fileName) {
 		if(fileName!=null){
-			RcpUtils.switchPerspective(Perspective.ID);
-			RcpUtils.activateActivity(Id.ACTIVITY_MASTER);
-			RcpUtils.activateActivity("fr.vitec.batch.activity.view");//TODO à gérer par point d'extention
-			ViewPartMaster viewMaster = (ViewPartMaster) RcpUtils.getView(ViewPartMaster.ID);
-
-			VitecModel model = VitecModel.getInstance();
-			model.open(fileName);
-			viewMaster.setInput(model);
-			
-			String currentTitle = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().getText();
-			int idx = currentTitle.lastIndexOf(SEP);
-			if(idx != -1){
-				currentTitle = currentTitle.substring(0, idx); 
-			}
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setText(currentTitle +SEP + fileName);
+			openBase(fileName);
 		}
+	}
+
+	private void openBase(String fileName) {
+		RcpUtils.switchPerspective(Perspective.ID);
+		RcpUtils.activateActivity(Id.ACTIVITY_MASTER);
+		RcpUtils.activateActivity("fr.vitec.batch.activity.view");//TODO à gérer par point d'extention
+		ViewPartMaster viewMaster = (ViewPartMaster) RcpUtils.getView(ViewPartMaster.ID);
+
+		VitecModel model = VitecModel.getInstance();
+		model.open(fileName);
+		viewMaster.setInput(model);
+		
+		String currentTitle = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().getText();
+		int idx = currentTitle.lastIndexOf(SEP);
+		if(idx != -1){
+			currentTitle = currentTitle.substring(0, idx); 
+		}
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setText(currentTitle +SEP + fileName);
 	}
 
 	@Override

@@ -28,6 +28,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// Fichier
 	private IWorkbenchAction exitAction;
 	private IWorkbenchAction saveAction;
+	private IWorkbenchAction saveAllAction;
 
 	// Actions - important to allocate these only in makeActions, and then use
 	// them
@@ -46,6 +47,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		
 		saveAction = ActionFactory.SAVE.create(window);
 		register(saveAction);
+		
+		saveAllAction = ActionFactory.SAVE_ALL.create(window);
+		register(saveAllAction);
 	}
 
 	@Override
@@ -58,6 +62,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		fileMenu.add(new GroupMarker(IWorkbenchActionConstants.FILE_START));
 		fileMenu.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
 		fileMenu.add(saveAction);
+		fileMenu.add(saveAllAction);
 		fileMenu.add(new GroupMarker(IWorkbenchActionConstants.FILE_END));
 		//fileMenu.add(ContributionItemFactory.REOPEN_EDITORS.create(window));
 		fileMenu.add(new Separator());
@@ -79,7 +84,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		menuBar.add(fileMenu);
 
 		//Menu Fenêtres
-		MenuManager windows = new MenuManager("Fenêtres", "fr.vitec.main.menu.windows");
+		MenuManager windows = new MenuManager("Fen\u00Eatres", "fr.vitec.main.menu.windows");
 		windows.add(new GroupMarker("windowsStart"));
 		//fileMenu.add(ContributionItemFactory.REOPEN_EDITORS.create(window));
 		windows.add(new GroupMarker("windowsEnd"));
@@ -97,6 +102,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 		IToolBarManager saveToolbar = new ToolBarManager(SWT.FLAT | SWT.RIGHT);
 	    saveToolbar.add(saveAction);
+	    saveToolbar.add(saveAllAction);
 	    coolBar.add(new ToolBarContributionItem(saveToolbar, "save"));
 
 	}

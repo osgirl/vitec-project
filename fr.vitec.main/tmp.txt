@@ -17,14 +17,14 @@ sm2qB8cU7Cr9
 - TODO à traiter
 - Gestion action "Créer un nouvelle base" alors qu'une autre est déjà ouverte
 - Gestion close base
-- Gestion suppression d'un film
-- Maj plugin cinemotion
 - Gérer tri/vue pas genre
 - Changer image
-
+- Menu About
 
 DONE
 - Gestion mode dirty
 - Gestion sauvegarde améliorée de la base (avec le mode dirty => "voulez-vous sauvegarder la base ?" à la fermeture de l'appli si pas d'enregistrement effectué avant)
 - Gestion suppression dans le tableau d'analyse
 - Afficher le nom de la base dans le titre
+- Gestion suppression d'un film
+- Maj plugin cinemotion

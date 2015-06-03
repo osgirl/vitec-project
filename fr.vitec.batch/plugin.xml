@@ -16,6 +16,11 @@
             class="fr.vitec.batch.views.BatchView"
             id="fr.vitec.batch.views.BatchView">
       </view>
+      <view
+            class="fr.vitec.batch.dialog.obsolete_TestViewPart"
+            id="fr.vitec.batch.dialog.obsolete_TestViewPart"
+            name="New ViewPart">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
@@ -36,6 +41,14 @@
             isEqualityPattern="false"
             pattern="fr.vitec.batch/fr.vitec.batch.views.BatchView">
       </activityPatternBinding>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="fr.vitec.batch.dialog.TestMultiPageEditorPart"
+            id="fr.vitec.batch.dialog.TestMultiPageEditorPart"
+            name="New MultiPageEditorPart">
+      </editor>
    </extension>
 
 </plugin>

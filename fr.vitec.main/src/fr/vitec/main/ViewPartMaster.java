@@ -111,18 +111,24 @@ public class ViewPartMaster extends DirtyViewPart implements Observer, IPersista
 				refresh();
 				setDirty(true);
 			}else if(String.valueOf(arg).equals(VitecModel.MESSAGE_DELETE)){
-				refresh();
+				refreshSync();
 				setDirty(true);
 				
-				TreeItem firstItem = viewer.getTree().getItem(0).getItem(0);
-				if(firstItem != null){
+				TreeItem[] items = viewer.getTree().getItems();
+				if(items.length != 0 && items[0].getItemCount()!=0){
+					
+					TreeItem firstItem = items[0].getItem(0);
 					viewer.getTree().select(firstItem);
 					
 					getDetailView().setFilm((FilmType) firstItem.getData());
+				}else{
+					RcpUtils.deactivateActivity(Id.ACTIVITY_DETAIL);
+					viewer.getTree().select(items[0]);
 				}
 			}
 		}
 	}
+
 
 	private ViewPartDetails getDetailView() {
 		return  (ViewPartDetails) RcpUtils.getView(ViewPartDetails.ID);
@@ -163,4 +169,14 @@ public class ViewPartMaster extends DirtyViewPart implements Observer, IPersista
 			}
 		});
 	}	
+
+	private void refreshSync() {
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				viewer.refresh();
+			}
+		});
+		
+	}
 }

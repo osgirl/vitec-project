@@ -13,6 +13,7 @@ Require-Bundle: fr.vitec.fmk;bundle-version="1.0.0",
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .,
- swt-grouplayout.jar
+ swt-grouplayout.jar,
+ swing2swt.jar
 Export-Package: fr.vitec.batch.extension,
  fr.vitec.batch.views

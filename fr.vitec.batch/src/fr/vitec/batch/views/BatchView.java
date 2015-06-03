@@ -499,11 +499,12 @@ public class BatchView extends DirtyViewPart implements Observer{
 		if(o instanceof VitecModel){
 			if(String.valueOf(arg).equals(VitecModel.MESSAGE_SAVE)){
 				setDirty(false);
-			}else if(String.valueOf(arg).equals(VitecModel.MESSAGE_ADD_FILM)){
-				setDirty(true);
 			}else if(String.valueOf(arg).equals(VitecModel.MESSAGE_DIR_CHANGE)){
 				setDirty(true);
 			}
+//			else if(String.valueOf(arg).equals(VitecModel.MESSAGE_ADD_FILM)){
+//				setDirty(true);
+//			}
 		}		
 	}
 }
